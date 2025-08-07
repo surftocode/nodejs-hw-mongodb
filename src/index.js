@@ -1,6 +1,5 @@
-import { initMongoConnection } from "./db/models/initMongoConnection";
-import { setupServer } from "./server";
+import { initMongoConnection } from "./db/models/initMongoConnection.js";
+import { setupServer } from "./server.js";
 
 
 setupServer();
-initMongoConnection();

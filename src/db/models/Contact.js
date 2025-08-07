@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const cotactSchema = new mongoose.Schema({
+export const contactSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "name is required"],
@@ -24,9 +24,21 @@ const cotactSchema = new mongoose.Schema({
     default: "personal",
   },
   createdAt: {
-    timestamps: true,
+    timestamp: {
+      type: mongoose.Schema.Types.Date,
+      default: Date.now,
+      immutable: true,
+      required: true,
+    },
   },
   updatedAt: {
-    timestamps: true,
+    timestamp: {
+      type: mongoose.Schema.Types.Date,
+      default: Date.now,
+      immutable: true,
+      required: true,
+    },
   },
 });
+
+export const contact = mongoose.model("contact", contactSchema);

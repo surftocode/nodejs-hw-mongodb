@@ -1,10 +1,13 @@
-import mongoose from "mongoose"
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 dotenv.config();
-export const initMongoConnection= async ()=>7
-try{
-    
+import mongoose from "mongoose";
 
-}catch(err){
-
-}
+export const initMongoConnection = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Mongo connection successfully established!");
+  } catch (err) {
+    console.error("Error:", err.message);
+    process.exit(1);
+  }
+};
