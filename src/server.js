@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 import pinoPretty from "pino-pretty";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
 import { readFile } from "fs/promises";
-import { Contacts } from "./db/models/Contact.js";
+import contact from "./db/models/Contact.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -27,7 +27,7 @@ export const setupServer = async () => {
 
   app.get("/contacts", async (req, res) => {
     try {
-      const contacts = await Contacts.find({});
+      const contacts = await contacts.find({});
       res.status(200).json({
         status: 200,
         message: "Successfully found contacts!",

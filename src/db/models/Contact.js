@@ -1,44 +1,38 @@
 import mongoose from "mongoose";
-export const contactSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "name is required"],
-    trim: true,
-    maxLenght: [50, "Name cant be more than 500 letters"],
-  },
-  phoneNumber: {
-    type: String,
-    required: [true, "Yo cannot pass the number"],
-  },
-  email: {
-    type: String,
-  },
-  isFavourite: {
-    type: Boolean,
-    default: false,
-  },
-  contactType: {
-    type: String,
-    enum: ["work", "home", "personal"],
-    required: true,
-    default: "personal",
-  },
-  createdAt: {
-    timestamp: {
-      type: mongoose.Schema.Types.Date,
-      default: Date.now,
-      immutable: true,
+export const contactSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "name is required"],
+      trim: true,
+      maxLenght: [50, "Name cant be more than 500 letters"],
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, "Yo cannot pass the number"],
+    },
+    email: {
+      type: String,
+    },
+    isFavourite: {
+      type: Boolean,
+      default: false,
+    },
+    contactType: {
+      type: String,
+      enum: ["work", "home", "personal"],
       required: true,
+      default: "personal",
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
   },
-  updatedAt: {
-    timestamp: {
-      type: mongoose.Schema.Types.Date,
-      default: Date.now,
-      immutable: true,
-      required: true,
-    },
-  },
-});
+  {
+    timestamps: true,
+  });
 
-export const contact = mongoose.model("contact", contactSchema);
+const contact = mongoose.model("contact", contactSchema);
+
+export default contact;
