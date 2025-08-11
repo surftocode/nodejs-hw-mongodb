@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from "dotenv.js";
 import express from "express";
 import pino from "pino-http";
 import cors from "cors";
