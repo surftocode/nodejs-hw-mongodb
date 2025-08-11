@@ -7,3 +7,4 @@ import {
 const router = express.Router();
 router.get("/contacts",getAllContacts);
 router.get("/contacts/:contactId",getContactsById);
+
