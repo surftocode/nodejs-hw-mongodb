@@ -1,4 +1,4 @@
-import dotenv from "dotenv.js";
+import dotenv from "dotenv";
 import express from "express";
 import pino from "pino-http";
 import cors from "cors";
@@ -27,7 +27,7 @@ export const setupServer = async () => {
 
   app.get("/contacts", async (req, res) => {
     try {
-      const contacts = await contacts.find({});
+      const contacts = await contact.find({}); 
       res.status(200).json({
         status: 200,
         message: "Successfully found contacts!",
