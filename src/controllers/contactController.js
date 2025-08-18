@@ -1,20 +1,19 @@
-
-import contact from "../db/models/Contact.js";
+import Contact from "../db/models/Contact.js";
 
 //Tüm contact listesini almak7
 export const getAllContacts = async (req, res) => {
   try {
-    const contacts = await contact.find().sort(-1);
-    req.status(200).json({
+    const contacts = await Contact.find().sort({createdAt:-1});
+    res.status(200).json({
       success: true,
       message: "Successfully found contacts!",
       data: contacts,
     });
   } catch (error) {
     res.status(500).json({
-      successfalse,
+      success:false,
       message: "Sunucu hatası",
-      error: error.mesage,
+      error: error.message,
     });
   }
 };
@@ -23,7 +22,7 @@ export const getAllContacts = async (req, res) => {
 
 export const getContactsById = async (req, res) => {
   try {
-    const contactByID = await contact.findById(req.params.id);
+    const contactByID = await Contact.findById(req.params.id);
     if (!contactByID) {
       return res.status(404).json({
         success: false,
