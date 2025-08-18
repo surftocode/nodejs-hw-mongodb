@@ -2,11 +2,9 @@ import dotenv from "dotenv";
 import express from "express";
 import pino from "pino-http";
 import cors from "cors";
-import mongoose from "mongoose";
 import pinoPretty from "pino-pretty";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
-import { readFile } from "fs/promises";
-import contact from "./db/models/Contact.js";
+import Contact from "./db/models/Contact.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -27,17 +25,18 @@ export const setupServer = async () => {
 
   app.get("/contacts", async (req, res) => {
     try {
-      const contacts = await contact.find({}); 
-      res.status(200).json({
-        status: 200,
-        message: "Successfully found contacts!",
-        data: contacts,
-      });
+      const contacts = await Contact.find({});
+
       if (!contacts) {
         return res.status(404).json({
           message: "cannot find contacts.",
         });
       }
+      res.status(200).json({
+        status: 200,
+        message: "Successfully found contacts!",
+        data: contacts,
+      });
     } catch (error) {
       console.error("error:", error.message);
     }
@@ -46,7 +45,7 @@ export const setupServer = async () => {
   app.get("/contacts/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const contactById = await contactsInFile.findById(id);
+      const contactById = await Contact.findById(id);
       res.status(200).json(contactById);
       if (!contactById) {
         res.status(404).json({
