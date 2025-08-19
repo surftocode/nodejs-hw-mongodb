@@ -5,7 +5,7 @@ import cors from "cors";
 import pinoPretty from "pino-pretty";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
 import Contact from "./db/models/Contact.js";
-dotenv.config();
+dotenv.config({debug:false});
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -27,7 +27,7 @@ export const setupServer = async () => {
     try {
       const contacts = await Contact.find({});
 
-      if (!contacts) {
+      if (!contacts || contacts.length === 0) {
         return res.status(404).json({
           message: "cannot find contacts.",
         });
@@ -39,6 +39,9 @@ export const setupServer = async () => {
       });
     } catch (error) {
       console.error("error:", error.message);
+      res.status(500).json({
+        message: "Server error",
+      });
     }
   });
 
@@ -46,14 +49,21 @@ export const setupServer = async () => {
     try {
       const { id } = req.params;
       const contactById = await Contact.findById(id);
-      res.status(200).json(contactById);
+
       if (!contactById) {
         res.status(404).json({
           message: "cannot find id",
         });
       }
+      res.status(200).json({
+        message: `Succesfully find contact with id ${id}`,
+        data: contactById,
+      });
     } catch (error) {
       console.error("error:", error.message);
+      res.status(500).json({
+        message: "Server error",
+      });
     }
   });
   app.use((req, res) => {
