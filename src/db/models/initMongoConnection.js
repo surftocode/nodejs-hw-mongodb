@@ -4,9 +4,7 @@ import mongoose from "mongoose";
 
 export const initMongoConnection = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URL,{
-      dbName: process.env.MONGODB_DB
-    });
+    await mongoose.connect(process.env.MONGODB_URL);
     console.log("Mongo connection successfully established!");
   } catch (err) {
     console.error("Error:", err.message);
