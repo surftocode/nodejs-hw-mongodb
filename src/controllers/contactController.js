@@ -1,45 +1,63 @@
 import mongoose from "mongoose";
-import contact from "../db/models/Contact.js";
+import Contact from "../db/models/Contact.js";
+import { errorHandler } from "../middlewares/errorHandler.js";
+import { createNewContact } from "../../services/contactService.js";
 
-//Tüm contact listesini almak7
+//Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
-  try {
-    const contacts = await contact.find().sort(-1);
-    req.status(200).json({
-      success: true,
-      message: "Successfully found contacts!",
-      data: contacts,
-    });
-  } catch (error) {
-    res.status(500).json({
-      successfalse,
-      message: "Sunucu hatası",
-      error: error.mesage,
+  const Contacts = await Contact.find().sort(-1);
+  if (!Contacts) {
+    return res.status(404).json({
+      message: "cannot find Contacts.",
     });
   }
+  req.status(200).json({
+    success: true,
+    message: "Successfully found Contacts!",
+    data: Contacts,
+  });
 };
 
-//idye göre contact almak
+//idye göre Contact almak
 
 export const getContactsById = async (req, res) => {
-  try {
-    const contactByID = await contact.findById(req.params.id);
-    if (!contactByID) {
-      return res.status(404).json({
-        success: false,
-        message: "Contact not found",
-      });
-    }
-    res.status(200).json({
-      success: true,
-      message: `Successfully found contact with id ${contactByID}!`,
-      data: contactByID,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: error.message,
-    });
+  const ContactByID = await Contact.findById(req.params.id);
+  if (!ContactByID) {
+    return notFoundHandler(res,"Contact not found");
   }
+  res.status(200).json({
+    success: true,
+    message: `Successfully found Contact with id ${ContactByID._id}!`,
+    data: ContactByID,
+  });
 };
+
+
+//Yeni contact eklemek
+
+export const createContact =async (req,res,next)=>{
+  const {name, phoneNumber,email,isFavourite,contactType}=req.body;
+  if(!name || !phoneNumber||!email||!isFavourite||!contactType){
+    return res.status(400).json({
+      status:400,
+      success:false,
+      messge:"Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
+    })
+  }
+
+}
+const newContact=createNewContact({
+  name:req.body.name,
+  email:req.body.email,
+  phoneNumber:req.body.phoneNumber,
+  isFavourite:req.body.isFavourite,
+  contactType:req.body.contactType,
+
+})
+  res.status(201).json({
+    success:true,
+    message: "Successfully created a contact!",
+		data: newContact,
+  })
+
+
