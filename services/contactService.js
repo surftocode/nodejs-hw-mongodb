@@ -8,6 +8,19 @@ export const createNewContact =async (data)=>{
 
 
   //contact güncelle
-  export const updateContact=async(data)=>{
+  export const updateContact=async(data,updateData)=>{
+    const updatedContact = await Contact.findByIdAndUpdate(
+      data._id,updateData,
+      { new: true, runValidators: true }
+    );
+    return updatedContact;
+    
+  }
+
+  //delete contact
+
+  export const deletedContact=async(id)=>{
+    const deletedContact=await Contact.findByIdAndDelete(id);
+    return deletedContact;
     
   }
