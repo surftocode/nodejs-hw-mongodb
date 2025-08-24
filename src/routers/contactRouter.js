@@ -2,11 +2,11 @@ import express, { Router } from "express";
 import dotenv from "dotenv";
 import { notFoundHandler } from "../middlewares/notFoundHandler";
 import { errorHandler } from "../middlewares/errorHandler";
-import Router from "express-promise-router";
 import {
   getAllContacts,
   getContactsById,
 } from "../controllers/contactController";
+import cors from "cors";
 import { ctrlWrapper } from "../utils/ctrlWrapper";
 dotenv.config();
 const app = express();
@@ -23,7 +23,8 @@ app.use(
     },
   })
 );
-const router=Router();
+const router = Router();
+app.use("/", router);
 app.get("/", (req, res) => {
   res.send("server is working");
 });
