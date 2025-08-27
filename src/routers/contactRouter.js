@@ -28,6 +28,7 @@ app.use(
   })
 );
 const router = Router();
+app.use("/", router);
 
 router.get("/", (req, res) => {
   res.send("server is working");
