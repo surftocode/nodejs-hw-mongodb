@@ -1,26 +1,28 @@
-import ContactController from "../controllers/contactController.js";""
+import {
+  getAllContacts,
+  getContactsById,
+} from "../controllers/contactController.js";
+("");
 
 //contact eklemek
-export const createNewContact =async (data)=>{
-    const newContact=await ContactController.create(data);
-    return newContact;
-  }
+export const createNewContact = async (data) => {
+  const newContact = await getAllContacts.create(data);
+  return newContact;
+};
 
+//contact güncelle
+export const updateContact = async (data, updateData) => {
+  const updatedContact = await getContactsById.findByIdAndUpdate(
+    data._id,
+    updateData,
+    { new: true, runValidators: true }
+  );
+  return updatedContact;
+};
 
-  //contact güncelle
-  export const updateContact=async(data,updateData)=>{
-    const updatedContact = await ContactController.findByIdAndUpdate(
-      data._id,updateData,
-      { new: true, runValidators: true }
-    );
-    return updatedContact;
-    
-  }
+//delete contact
 
-  //delete contact
-
-  export const deletedContact=async(id)=>{
-    const deletedContact=await ContactController.findByIdAndDelete(id);
-    return deletedContact;
-    
-  }
+export const deletedContact = async (id) => {
+  const deletedContact = await getContactsById.findByIdAndDelete(id);
+  return deletedContact;
+};
