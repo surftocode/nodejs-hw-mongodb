@@ -1,17 +1,17 @@
 import express, { Router } from "express";
 import dotenv from "dotenv";
-import { notFoundHandler } from "../middlewares/notFoundHandler";
-import { errorHandler } from "../middlewares/errorHandler";
+import { notFoundHandler } from "../middlewares/notFoundHandler.js";
+import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   createContact,
   deleteContactController,
   getAllContacts,
   getContactsById,
   updatedContactController,
-} from "../controllers/contactController";
+} from "../controllers/contactController.js";
 import cors from "cors";
-import { ctrlWrapper } from "../utils/ctrlWrapper";
-import pino  from "pino-http";
+import { ctrlWrapper } from "../utils/ctrlWrapper.js";
+import pino from "pino-http";
 dotenv.config();
 const app = express();
 app.use(
@@ -41,4 +41,5 @@ router.patch("/contacts/:id", ctrlWrapper(updatedContactController));
 router.delete("/contacts/:id", ctrlWrapper(deleteContactController));
 router.use("*", notFoundHandler);
 router.use(errorHandler);
-app.use("/", router);
+
+export {router};

@@ -1,4 +1,4 @@
-import Contact from "../src/db/models/Contact";
+import Contact from "../src/db/models/Contact.js";
 
 //contact eklemek
 export const createNewContact =async (data)=>{

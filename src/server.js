@@ -3,6 +3,7 @@ import express from "express";
 import pino from "pino-http";
 import cors from "cors";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
+import { router } from "./routers/contactRouter.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -21,6 +22,7 @@ app.use(logger);
 app.use(cors());
 export const setupServer = async () => {
   await initMongoConnection();
+  app.uswr("/",router)
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server is running on port ${process.env.PORT || 3000}`);
