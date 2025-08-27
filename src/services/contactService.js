@@ -1,15 +1,15 @@
-import Contact from "../src/db/models/Contact.js";
+import ContactController from "../controllers/contactController.js";""
 
 //contact eklemek
 export const createNewContact =async (data)=>{
-    const newContact=await Contact.create(data);
+    const newContact=await ContactController.create(data);
     return newContact;
   }
 
 
   //contact güncelle
   export const updateContact=async(data,updateData)=>{
-    const updatedContact = await Contact.findByIdAndUpdate(
+    const updatedContact = await ContactController.findByIdAndUpdate(
       data._id,updateData,
       { new: true, runValidators: true }
     );
@@ -20,7 +20,7 @@ export const createNewContact =async (data)=>{
   //delete contact
 
   export const deletedContact=async(id)=>{
-    const deletedContact=await Contact.findByIdAndDelete(id);
+    const deletedContact=await ContactController.findByIdAndDelete(id);
     return deletedContact;
     
   }
