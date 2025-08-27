@@ -4,7 +4,7 @@ import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   createNewContact,
   updateContact,
-} from "../../services/contactService.js";
+} from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
 
 //Tüm Contact listesini almak7
