@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 import Contact from "../db/models/Contact.js";
 import { errorHandler } from "../middlewares/errorHandler.js";
-import {
-  createNewContact,
-  updateContact,
-} from "../services/contactService.js";
+import { createNewContact, updateContact } from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
 
 //Tüm Contact listesini almak7
@@ -48,19 +45,19 @@ export const createContact = async (req, res, next) => {
         "Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
     });
   }
+  const newContact = createNewContact({
+    name: req.body.name,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber,
+    isFavourite: req.body.isFavourite,
+    contactType: req.body.contactType,
+  });
+  res.status(201).json({
+    success: true,
+    message: "Successfully created a contact!",
+    data: newContact,
+  });
 };
-const newContact = createNewContact({
-  name: req.body.name,
-  email: req.body.email,
-  phoneNumber: req.body.phoneNumber,
-  isFavourite: req.body.isFavourite,
-  contactType: req.body.contactType,
-});
-res.status(201).json({
-  success: true,
-  message: "Successfully created a contact!",
-  data: newContact,
-});
 
 //Contact güncelleme
 export const updatedContactController = async (req, res) => {
