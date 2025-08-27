@@ -39,7 +39,7 @@ router.get("/contacts/:id", ctrlWrapper(getContactsById));
 router.post("/contacts", ctrlWrapper(createContact));
 router.patch("/contacts/:id", ctrlWrapper(updatedContactController));
 router.delete("/contacts/:id", ctrlWrapper(deleteContactController));
-router.use("*", notFoundHandler);
+router.use(notFoundHandler);
 router.use(errorHandler);
 
-export {router};
+export { router };

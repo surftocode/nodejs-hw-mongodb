@@ -17,12 +17,12 @@ const logger = pino({
     },
   },
 });
-
 app.use(logger);
+
 app.use(cors());
 export const setupServer = async () => {
   await initMongoConnection();
-  app.uswr("/",router)
+  app.use("/", router);
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server is running on port ${process.env.PORT || 3000}`);
