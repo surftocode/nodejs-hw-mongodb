@@ -8,6 +8,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 dotenv.config();
 const app = express();
+app.use(cors());
 app.use(
   express.json({
     type: ["application/json", "application/vnd.api+json"],
@@ -24,11 +25,11 @@ const logger = pino({
   },
 });
 app.use(logger);
+app.use(router);
 
-app.use(cors());
 export const setupServer = async () => {
   await initMongoConnection();
-  app.use("/", router);
+
   app.use(notFoundHandler);
   app.use(errorHandler);
 
