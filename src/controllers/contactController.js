@@ -6,7 +6,6 @@ import {
   updateContact,
 } from "../../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
   const Contacts = await Contact.find().sort(-1);

@@ -7,6 +7,7 @@ import {
   getAllContacts,
   getContactsById,
 } from "../controllers/contactController";
+import validateBody, { isValidId, schema } from "../utils/validation.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper";
 dotenv.config();
 const app = express();
@@ -23,16 +24,19 @@ app.use(
     },
   })
 );
-const router=Router();
+const router = Router();
 app.get("/", (req, res) => {
   res.send("server is working");
 });
 
 router.get("/contacts", ctrlWrapper(getAllContacts));
 
-router.get("/contacts/:id", ctrlWrapper(getContactsById));
-router.post("/contacts", ctrlWrapper(createContact));
-router.patch("/contacts/:id", ctrlWrapper(updatedContactController));
+router.get("/contacts/:id", isValidId,ctrlWrapper(getContactsById));
+router.post("/contacts",
+  validateBody(schema),
+ ctrlWrapper(createContact));
+router.patch("/contacts/:id",  validateBody(schema),
+isValidId, ctrlWrapper(updatedContactController));
 router.delete("/contacts/:id", ctrlWrapper(deletedContactController));
 router.use("*", notFoundHandler);
 router.use(errorHandler);
