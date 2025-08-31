@@ -33,9 +33,9 @@ router.get("/contacts", ctrlWrapper(getAllContacts));
 
 router.get("/contacts/:id", isValidId,ctrlWrapper(getContactsById));
 router.post("/contacts",
-  validateBody(schema),
+  validateBody,
  ctrlWrapper(createContact));
-router.patch("/contacts/:id",  validateBody(schema),
+router.patch("/contacts/:id",  validateBody,
 isValidId, ctrlWrapper(updatedContactController));
 router.delete("/contacts/:id", ctrlWrapper(deletedContactController));
 router.use("*", notFoundHandler);
