@@ -4,20 +4,32 @@ import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   createNewContact,
   updateContact,
+  deletedContact,
+  getAllContacts,
 } from "../../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-//Tüm Contact listesini almak7
+import { parseSortParams } from "../utils/parseSortOrder.js";
+import { calculatePages } from "../utils/calculatePages.js";
+import {parsePaginationParams} from "../utils/parsePagination.js"
+import { parseFilterParams } from "../utils/parseFilterParams.js";
+
+
+
+//Tüm Contact listesini almak
 export const getAllContacts = async (req, res) => {
-  const Contacts = await Contact.find().sort(-1);
-  if (!Contacts) {
-    return res.status(404).json({
-      message: "cannot find Contacts.",
-    });
-  }
+  const {page,perPage}=parsePaginationParams(req.query);
+  const {sortOrder,sortBy}=parseSortParams(req.query);
+  const filter=parseFilterParams(req.query);
+  const result = await getAllContacts({
+    page,
+    perPage,sortOrder,
+    sortBy,
+    filter,
+  })
   req.status(200).json({
     success: true,
     message: "Successfully found Contacts!",
-    data: Contacts,
+    ...result, 
   });
 };
 

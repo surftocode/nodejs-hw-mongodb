@@ -10,5 +10,7 @@ export const parseFilterParams=(query)=>{
     if(email){
         filter.email={$regex:email,$options:"i"};
     }
+    if(isFavourite){
+        filter.isFavourite=isFavourite==="true";
     return filter;
 }
