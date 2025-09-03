@@ -68,8 +68,8 @@ export const updatedContactController = async (req, res) => {
 
   if (!updated) {
     returnres.sttaus(404).json({
-      status:404,
-      message:"Contact cannot be updated!",
+      status: 404,
+      message: "Contact cannot be updated!",
     });
   }
   res.status(200).json({
@@ -87,10 +87,9 @@ export const deleteContactController = async (req, res) => {
   const deletedId = await deletedContact(id);
   if (!deletedId) {
     return res.status(404).json({
-      status:404,
-      message:"Contact cannot be deleted!",
-
-    })
+      status: 404,
+      message: "Contact cannot be deleted!",
+    });
   }
 
   res.status(204).end();

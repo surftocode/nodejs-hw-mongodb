@@ -17,7 +17,7 @@ export const updateContact = async (data, updateData) => {
 
 //delete contact
 
-export const deletedContact = async (id) => {
-  const deletedContact = await Contact.findByIdAndDelete(id);
-  return deletedContact;
+export const removed = async (id) => {
+  const removed = await Contact.findByIdAndDelete(id);
+  return removed;
 };
