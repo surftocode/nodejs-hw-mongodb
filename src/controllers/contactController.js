@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import Contact from "../db/models/Contact.js";
-import { errorHandler } from "../middlewares/errorHandler.js";
-import { createNewContact, updateContact } from "../services/contactService.js";
-import { notFoundHandler } from "../middlewares/notFoundHandler.js";
+import {
+  createNewContact,
+  updateContact,
+  deletedContact,
+} from "../services/contactService.js";
 
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
@@ -65,7 +67,10 @@ export const updatedContactController = async (req, res) => {
   const updated = await updateContact(id, req.body);
 
   if (!updated) {
-    return notFoundHandler(res, "Contact not found");
+    returnres.sttaus(404).json({
+      status:404,
+      message:"Contact cannot be updated!",
+    });
   }
   res.status(200).json({
     status: 200,
@@ -81,7 +86,11 @@ export const deleteContactController = async (req, res) => {
 
   const deletedId = await deletedContact(id);
   if (!deletedId) {
-    return notFoundHandler(res, "Contact cannot be found!");
+    return res.status(404).json({
+      status:404,
+      message:"Contact cannot be deleted!",
+
+    })
   }
 
   res.status(204).end();

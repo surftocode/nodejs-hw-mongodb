@@ -1,18 +1,13 @@
-import {
-  getAllContacts,
-  getContactsById,
-} from "../controllers/contactController.js";
-("");
-
+import Contact from "../db/models/Contacts.js";
 //contact eklemek
 export const createNewContact = async (data) => {
-  const newContact = await getAllContacts.create(data);
+  const newContact = await Contact.create(data);
   return newContact;
 };
 
 //contact güncelle
 export const updateContact = async (data, updateData) => {
-  const updatedContact = await getContactsById.findByIdAndUpdate(
+  const updatedContact = await Contact.findByIdAndUpdate(
     data._id,
     updateData,
     { new: true, runValidators: true }
@@ -23,6 +18,6 @@ export const updateContact = async (data, updateData) => {
 //delete contact
 
 export const deletedContact = async (id) => {
-  const deletedContact = await getContactsById.findByIdAndDelete(id);
+  const deletedContact = await Contact.findByIdAndDelete(id);
   return deletedContact;
 };
