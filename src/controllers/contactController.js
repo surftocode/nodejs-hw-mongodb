@@ -10,26 +10,25 @@ import {
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
 import { parseSortParams } from "../utils/parseSortOrder.js";
 import { calculatePages } from "../utils/calculatePages.js";
-import {parsePaginationParams} from "../utils/parsePagination.js"
+import { parsePaginationParams } from "../utils/parsePagination.js";
 import { parseFilterParams } from "../utils/parseFilterParams.js";
-
-
 
 //Tüm Contact listesini almak
 export const getAllContacts = async (req, res) => {
-  const {page,perPage}=parsePaginationParams(req.query);
-  const {sortOrder,sortBy}=parseSortParams(req.query);
-  const filter=parseFilterParams(req.query);
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortOrder, sortBy } = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
   const result = await getAllContacts({
     page,
-    perPage,sortOrder,
+    perPage,
+    sortOrder,
     sortBy,
     filter,
-  })
+  });
   req.status(200).json({
     success: true,
     message: "Successfully found Contacts!",
-    ...result, 
+    ...result,
   });
 };
 

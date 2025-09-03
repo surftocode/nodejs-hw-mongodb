@@ -1,13 +1,16 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
     "joi": "^18.0.1",
+    "mongoose": "^8.18.0",
     "pino-http": "^10.5.0",
     "pino-pretty": "^13.1.1"
   },
   "name": "nodejs-hw-mongodb",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -24,6 +27,5 @@
   "bugs": {
     "url": "https://github.com/surftocode/nodejs-hw-mongodb/issues"
   },
-  "homepage": "https://github.com/surftocode/nodejs-hw-mongodb#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/surftocode/nodejs-hw-mongodb#readme"
 }
