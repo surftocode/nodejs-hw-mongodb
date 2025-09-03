@@ -8,8 +8,8 @@ import {
 
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
-  const Contacts = await Contact.find().sort(-1);
-  if (!Contacts) {
+  const Contacts = await Contact.find().sort({ createdAt: -1 });
+  if (Contacts.lenght === 0) {
     return res.status(404).json({
       message: "cannot find Contacts.",
     });

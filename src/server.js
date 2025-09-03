@@ -25,11 +25,12 @@ const logger = pino({
   },
 });
 app.use(logger);
-app.use(router);
+
 app.use((req, res, next) => {
   console.log("after router", req.method, req.path);
   next();
 });
+app.use("/", router);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
