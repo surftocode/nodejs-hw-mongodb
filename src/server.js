@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import pino from "pino-http";
 import cors from "cors";
-import { router } from "./routers/contactRouter.js";
+import contactRouter from "./routers/contactRouter.js";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(
   express.json({
-    type: ["application/json", "application/vnd.api+json"],
+    "Content-type": "application/json",
   })
 );
 const logger = pino({
@@ -26,21 +26,21 @@ const logger = pino({
 });
 app.use(logger);
 
-app.use((req, res, next) => {
-  console.log("after router", req.method, req.path);
-  next();
+app.use("/contacts", contactRouter);
+app.get("/", (req, res, next) => {
+  res.json({
+    message: "Welcome to Contact API",
+    status: "success",
+    endpoints: {
+      contacts: "/contacts",
+    },
+  });
 });
-app.use("/", router);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
 export const setupServer = async () => {
   await initMongoConnection();
-
-  app.use((req, res) => {
-    console.log("Hiçbir route eşleşmedi", req.method, req.path);
-    res.status(404).send("hiçbr route eşleşmedi");
-  });
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server is running on port ${process.env.PORT || 3000}`);

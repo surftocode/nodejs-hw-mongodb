@@ -30,8 +30,7 @@ export const contactSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
-    collections: "contacts",
+    timestamps: [{ createdAt: true, updatedAt: false }],
   }
 );
 

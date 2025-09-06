@@ -1,20 +1,20 @@
-import mongoose from "mongoose";
 import Contact from "../db/models/Contact.js";
 import {
   createNewContact,
   updateContact,
   deletedContact,
 } from "../services/contactService.js";
+import express from "express";
 
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
   const Contacts = await Contact.find().sort({ createdAt: -1 });
-  if (Contacts.lenght === 0) {
+  if (Contacts.length === 0) {
     return res.status(404).json({
       message: "cannot find Contacts.",
     });
   }
-  req.status(200).json({
+  res.status(200).json({
     success: true,
     message: "Successfully found Contacts!",
     data: Contacts,
@@ -43,17 +43,18 @@ export const createContact = async (req, res, next) => {
     return res.status(400).json({
       status: 400,
       success: false,
-      messge:
+      message:
         "Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
     });
   }
-  const newContact = createNewContact({
+  const newContact = new Contact({
     name: req.body.name,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
     isFavourite: req.body.isFavourite,
     contactType: req.body.contactType,
   });
+  await newContact.save();
   res.status(201).json({
     success: true,
     message: "Successfully created a contact!",
@@ -64,7 +65,11 @@ export const createContact = async (req, res, next) => {
 //Contact güncelleme
 export const updatedContactController = async (req, res) => {
   const { id } = req.params;
-  const updated = await updateContact(id, req.body);
+  const updated = await updateContact(
+    id,
+    { ...req.body },
+    { new: true, runValidators: true }
+  );
 
   if (!updated) {
     returnres.sttaus(404).json({
@@ -72,7 +77,7 @@ export const updatedContactController = async (req, res) => {
       message: "Contact cannot be updated!",
     });
   }
-  res.status(200).json({
+  return res.status(200).json({
     status: 200,
     message: "Successfully patched a contact!",
     data: updated,
@@ -92,5 +97,5 @@ export const deleteContactController = async (req, res) => {
     });
   }
 
-  res.status(204).end();
+  return res.status(204).end();
 };
