@@ -39,12 +39,27 @@ export const getContactsById = async (req, res) => {
 
 export const createContact = async (req, res, next) => {
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
-  if (!name || !phoneNumber || !email || !isFavourite || !contactType) {
+  if (
+    !name ||
+    !phoneNumber ||
+    !email ||
+    isFavourite === undefined ||
+    !contactType
+  ) {
     return res.status(400).json({
       status: 400,
       success: false,
       message:
         "Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
+    });
+  }
+
+  const exist = await Contact.findOne({ email });
+  if (exist) {
+    return res.status(409).json({
+      status: 409,
+      success: false,
+      message: "Contact has already exists!",
     });
   }
   const newContact = {
@@ -54,14 +69,6 @@ export const createContact = async (req, res, next) => {
     isFavourite,
     contactType,
   };
-  const exist = await Contact.findOne({ email });
-  if (exist) {
-    return res.status(409).json({
-      status: 409,
-      success: false,
-      message: "Contact has already exists!",
-    });
-  }
   const savedContact = await createNewContact(newContact);
 
   res.status(201).json({
