@@ -47,18 +47,27 @@ export const createContact = async (req, res, next) => {
         "Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
     });
   }
-  const newContact = new Contact({
-    name: req.body.name,
-    email: req.body.email,
-    phoneNumber: req.body.phoneNumber,
-    isFavourite: req.body.isFavourite,
-    contactType: req.body.contactType,
-  });
-  await newContact.save();
+  const newContact = {
+    name,
+    phoneNumber,
+    email,
+    isFavourite,
+    contactType,
+  };
+  const exist = await Contact.findOne({ email });
+  if (exist) {
+    return res.status(409).json({
+      status: 409,
+      success: false,
+      message: "Contact has already exists!",
+    });
+  }
+  const savedContact = await createNewContact(newContact);
+
   res.status(201).json({
     success: true,
     message: "Successfully created a contact!",
-    data: newContact,
+    data: savedContact,
   });
 };
 

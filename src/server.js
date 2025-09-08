@@ -6,6 +6,7 @@ import contactRouter from "./routers/contactRouter.js";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
+import { createContact } from "./controllers/contactController.js";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -36,6 +37,11 @@ app.get("/", (req, res, next) => {
     },
   });
 });
+// app.post("/contacts", (req,res)=>{
+//   const newContact = createContact(req,res);
+//   res.status(201).json(newContact);
+
+// });
 app.use(notFoundHandler);
 app.use(errorHandler);
 
