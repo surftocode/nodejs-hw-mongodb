@@ -1,34 +1,23 @@
-import mongoose from "mongoose";
 import Contact from "../db/models/Contact.js";
-import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   createNewContact,
   updateContact,
   deletedContact,
-  getAllContacts,
-} from "../../services/contactService.js";
-import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-import { parseSortParams } from "../utils/parseSortOrder.js";
-import { calculatePages } from "../utils/calculatePages.js";
-import { parsePaginationParams } from "../utils/parsePagination.js";
-import { parseFilterParams } from "../utils/parseFilterParams.js";
+} from "../services/contactService.js";
+import express from "express";
 
-//Tüm Contact listesini almak
+//Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
-  const { page, perPage } = parsePaginationParams(req.query);
-  const { sortOrder, sortBy } = parseSortParams(req.query);
-  const filter = parseFilterParams(req.query);
-  const result = await getAllContacts({
-    page,
-    perPage,
-    sortOrder,
-    sortBy,
-    filter,
-  });
-  req.status(200).json({
+  const Contacts = await Contact.find().sort({ createdAt: -1 });
+  if (Contacts.length === 0) {
+    return res.status(404).json({
+      message: "cannot find Contacts.",
+    });
+  }
+  res.status(200).json({
     success: true,
     message: "Successfully found Contacts!",
-    ...result,
+    data: Contacts,
   });
 };
 
@@ -50,37 +39,61 @@ export const getContactsById = async (req, res) => {
 
 export const createContact = async (req, res, next) => {
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
-  if (!name || !phoneNumber || !email || !isFavourite || !contactType) {
+  if (
+    !name ||
+    !phoneNumber ||
+    !email ||
+    isFavourite === undefined ||
+    !contactType
+  ) {
     return res.status(400).json({
       status: 400,
       success: false,
-      messge:
+      message:
         "Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
     });
   }
+
+  const exist = await Contact.findOne({ email });
+  if (exist) {
+    return res.status(409).json({
+      status: 409,
+      success: false,
+      message: "Contact has already exists!",
+    });
+  }
+  const newContact = {
+    name,
+    phoneNumber,
+    email,
+    isFavourite,
+    contactType,
+  };
+  const savedContact = await createNewContact(newContact);
+
+  res.status(201).json({
+    success: true,
+    message: "Successfully created a contact!",
+    data: savedContact,
+  });
 };
-const newContact = createNewContact({
-  name: req.body.name,
-  email: req.body.email,
-  phoneNumber: req.body.phoneNumber,
-  isFavourite: req.body.isFavourite,
-  contactType: req.body.contactType,
-});
-res.status(201).json({
-  success: true,
-  message: "Successfully created a contact!",
-  data: newContact,
-});
 
 //Contact güncelleme
 export const updatedContactController = async (req, res) => {
   const { id } = req.params;
-  const updated = await updateContact(id, req.body);
+  const updated = await updateContact(
+    id,
+    { ...req.body },
+    { new: true, runValidators: true }
+  );
 
   if (!updated) {
-    return notFoundHandler(res, "Contact not found");
+    returnres.sttaus(404).json({
+      status: 404,
+      message: "Contact cannot be updated!",
+    });
   }
-  res.status(200).json({
+  return res.status(200).json({
     status: 200,
     message: "Successfully patched a contact!",
     data: updated,
@@ -94,8 +107,11 @@ export const deleteContactController = async (req, res) => {
 
   const deletedId = await deletedContact(id);
   if (!deletedId) {
-    return notFoundHandler(res, "Contact cannot be found!");
+    return res.status(404).json({
+      status: 404,
+      message: "Contact cannot be deleted!",
+    });
   }
 
-  res.status(204).end();
+  return res.status(204).end();
 };

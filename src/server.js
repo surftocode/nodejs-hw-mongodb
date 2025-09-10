@@ -5,11 +5,32 @@ import cors from "cors";
 import mongoose from "mongoose";
 import pinoPretty from "pino-pretty";
 import { initMongoConnection } from "./db/initMongoConnection.js";
-
+import { not } from "joi";
+import { notFoundHandler } from "./middlewares/notFoundHandler.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import { contactRouter } from "./routers/contactRouter.js";
 
 dotenv.config();
 const app = express();
-app.use(cors())
+app.use(
+  express.json({
+    "Content-type": "application/json",
+  })
+);
+app.use(pino({ logger: pinoPretty() }));
+app.use(cors());
+app.get("/contacts", contactRouter);
+app.get("/", (req, res) => {
+  res.json({
+    message: "Welcome to Contact API",
+    status: "success",
+    endpoints: {
+      contacts: "/contacts",
+    },
+  });
+});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export const setupServer = async () => {
   await initMongoConnection();

@@ -1,14 +1,13 @@
 import express, { Router } from "express";
 import dotenv from "dotenv";
-import { notFoundHandler } from "../middlewares/notFoundHandler";
-import { errorHandler } from "../middlewares/errorHandler";
-import Router from "express-promise-router";
+import { notFoundHandler } from "../middlewares/notFoundHandler.js";
+import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   getAllContacts,
   getContactsById,
-} from "../controllers/contactController";
+} from "../controllers/contactController.js";
 import validateBody, { isValidId, schema } from "../utils/validation.js";
-import { ctrlWrapper } from "../utils/ctrlWrapper";
+import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 dotenv.config();
 const app = express();
 app.use(
@@ -31,12 +30,15 @@ app.get("/", (req, res) => {
 
 router.get("/contacts", ctrlWrapper(getAllContacts));
 
-router.get("/contacts/:id", isValidId,ctrlWrapper(getContactsById));
-router.post("/contacts",
+router.get("/contacts/:id", isValidId, ctrlWrapper(getContactsById));
+router.post("/contacts", validateBody, ctrlWrapper(createContact));
+router.patch(
+  "/contacts/:id",
   validateBody,
- ctrlWrapper(createContact));
-router.patch("/contacts/:id",  validateBody,
-isValidId, ctrlWrapper(updatedContactController));
+  isValidId,
+  ctrlWrapper(updatedContactController)
+);
 router.delete("/contacts/:id", ctrlWrapper(deletedContactController));
 router.use("*", notFoundHandler);
 router.use(errorHandler);
+export default router;
