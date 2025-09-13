@@ -29,7 +29,11 @@ const logger = pino({
 });
 app.use(logger);
 app.use(cors());
-app.get("/contacts", contactRouter);
+app.get("/", (req, res) => {
+  res.send("server is working");
+});
+
+
 app.get("/", (req, res) => {
   res.json({
     message: "Welcome to Contact API",
@@ -39,6 +43,7 @@ app.get("/", (req, res) => {
     },
   });
 });
+app.use("/contacts", contactRouter);
 app.use(notFoundHandler);
 app.use(errorHandler);
 

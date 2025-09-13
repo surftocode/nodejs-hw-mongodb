@@ -1,7 +1,3 @@
-import express, { Router } from "express";
-import dotenv from "dotenv";
-import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   createContact,
   deleteContactController,
@@ -15,28 +11,27 @@ import {
   createContactSchema,
   updateContactSchema,
 } from "../validator/validation.js";
-const app = express();
+import { Router } from "express";
 const router = Router();
-app.get("/", (req, res) => {
-  res.send("server is working");
-});
 
-router.get("/contacts", ctrlWrapper(getAllContacts));
+
+router.get("/", ctrlWrapper(getAllContacts));
 
 // router.get("/contacts/:id", ctrlWrapper(getContactsById));
-router.post("/",
-  validateBody(createContactSchema),
-  ctrlWrapper(createContact)
-);
+router.post("/", validateBody(createContactSchema), ctrlWrapper(createContact));
 // router.patch(
 //   ":id",
 //   validateBody(updateContactSchema),
 //   ctrlWrapper(updatedContactController)
 // );
-router.route("/:id")
-.get(ctrlWrapper(getContactsById))
-.patch(validateBody(updateContactSchema), ctrlWrapper(updatedContactController))
-.delete(ctrlWrapper(deleteContactController));
-router.delete("/contacts/:id", ctrlWrapper(deleteContactController));
+router
+  .route("/:id")
+  .get(ctrlWrapper(getContactsById))
+  .patch(
+    validateBody(updateContactSchema),
+    ctrlWrapper(updatedContactController)
+  )
+  .delete(ctrlWrapper(deleteContactController));
+router.delete("/:id", ctrlWrapper(deleteContactController));
 
 export default router;
