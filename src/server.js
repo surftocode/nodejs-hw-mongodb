@@ -5,10 +5,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import pinoPretty from "pino-pretty";
 import { initMongoConnection } from "./db/initMongoConnection.js";
-import { not } from "joi";
+
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import { contactRouter } from "./routers/contactRouter.js";
+import contactRouter from "./routers/contactRouter.js";
 
 dotenv.config();
 const app = express();
@@ -17,7 +17,17 @@ app.use(
     "Content-type": "application/json",
   })
 );
-app.use(pino({ logger: pinoPretty() }));
+const logger = pino({
+  transport: {
+    target: "pino-pretty",
+    options: {
+      colorize: true,
+      translateTime: "SYS:standard",
+      ignore: "pid,hostname",
+    },
+  },
+});
+app.use(logger);
 app.use(cors());
 app.get("/contacts", contactRouter);
 app.get("/", (req, res) => {
