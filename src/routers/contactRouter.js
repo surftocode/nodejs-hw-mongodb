@@ -9,9 +9,7 @@ import {
   getContactsById,
   updatedContactController,
 } from "../controllers/contactController.js";
-import cors from "cors";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
-import pino from "pino-http";
 dotenv.config();
 const router = Router();
 router.get("/", (req, res) => {
