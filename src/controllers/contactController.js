@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import Contact from "../db/models/Contact.js";
-import { errorHandler } from "../middlewares/errorHandler.js";
 import { createNewContact, updateContact } from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
 
@@ -45,7 +44,7 @@ export const createContact = async (req, res, next) => {
         "Please provide all required fields: name, phoneNumber, email, isFavourite, contactType",
     });
   }
-  const newContact = createNewContact({
+  const newContact = await createNewContact({
     name: req.body.name,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,

@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
-import User from "./user";
 
 export const sessionShcema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
-    ref:"User",
+    ref: "User",
   },
   accessToken: {
-    type: string,
+    type: String,
     required: true,
   },
   refreshToken: {

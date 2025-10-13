@@ -1,10 +1,9 @@
-import express from "express";
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
-import User from "../db/models/user";
-import Session from "../db/models/session";
+import User from "../db/models/user.js";
+import Session from "../db/models/session.js";
 import { randomBytes } from "crypto";
-import { FIFTEEN_MINUTES, ONE_MONTH } from "../constants";
+import { FIFTEEN_MINUTES, ONE_MONTH } from "../constants/index.js";
 
 export const registerUser = async (payload) => {
   const user = await User.findOne({ email: payload.email });
@@ -47,4 +46,35 @@ export const loginUser = async (payload) => {
   });
 };
 
-export const refreshToken=
+export const refreshTokenSession = async ({ sessionId, refreshToken }) => {
+  const session = await Session.findOne({
+    _id: sessionId,
+    refreshToken,
+  });
+
+  if (!session) {
+    throw createHttpError(401, "session is not exist");
+  }
+  const isSessionExpired =
+    new Date() > new Date(session.refreshTokenValidUntill);
+  if (isSessionExpired) {
+    throw createHttpError(401, " Token is expired.");
+  }
+
+  const newSession = createSession();
+
+  await Session.deleteOne({
+    _id: sessionId,
+    refreshToken,
+  });
+
+  return Session.create({
+    userId: session.userId,
+    ...newSession,
+  });
+};
+
+
+export const logoutService=async (payload)=>{
+  
+}

@@ -1,11 +1,14 @@
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 import express from "express";
 import pino from "pino-http";
 import cors from "cors";
 import { initMongoConnection } from "./db/models/initMongoConnection.js";
-import { router } from "./routers/contactRouter.js";
+import contactRouter from "../src/routers/contactRouter.js";
+import authRouter from "../src/routers/authRouter.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
+import cookieParser from "cookie-parser";
 dotenv.config();
 const app = express();
 app.use(
@@ -26,9 +29,12 @@ const logger = pino({
 app.use(logger);
 
 app.use(cors());
+app.use(cookieParser());
 export const setupServer = async () => {
   await initMongoConnection();
-  app.use("/", router);
+  app.use("/api/contacts", contactRouter);
+  app.use("/api/auth", authRouter);
+
   app.use(notFoundHandler);
   app.use(errorHandler);
 

@@ -7,22 +7,23 @@ import {
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { userSchema } from "../db/models/user.js";
 import { validateBody } from "../validation/validateUser.js";
-import { loginUser } from "../services/auth.js";
+
 dotenv.config();
 const router = Router();
-router.get("/auth", (req, res) => {
+
+
+router.get("/", (req, res) => {
   res.send("auth router is working");
+
 });
 
 router.post(
-  "/auth/register",
+  "/register",
   validateBody(userSchema),
   ctrlWrapper(registerController)
 );
 
-router.post(
-  "/auth/login",
-  ctrlWrapper(loginUserController)
-);
+router.post("/login", 
+ctrlWrapper(loginUserController));
 
 export default router;

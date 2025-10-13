@@ -1,7 +1,5 @@
-import express, { Router } from "express";
+import { Router } from "express";
 import dotenv from "dotenv";
-import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-import { errorHandler } from "../middlewares/errorHandler.js";
 import {
   createContact,
   deleteContactController,
@@ -16,12 +14,10 @@ router.get("/", (req, res) => {
   res.send("server is working");
 });
 
-router.get("/contacts", ctrlWrapper(getAllContacts));
+router.get("/all", ctrlWrapper(getAllContacts));
+router.get("/:id", ctrlWrapper(getContactsById));
+router.post("/", ctrlWrapper(createContact));
+router.patch("/:id", ctrlWrapper(updatedContactController));
+router.delete("/:id", ctrlWrapper(deleteContactController));
 
-router.get("/contacts/:id", ctrlWrapper(getContactsById));
-router.post("/contacts", ctrlWrapper(createContact));
-router.patch("/contacts/:id", ctrlWrapper(updatedContactController));
-router.delete("/contacts/:id", ctrlWrapper(deleteContactController));
-
-
-export { router };
+export default router;
