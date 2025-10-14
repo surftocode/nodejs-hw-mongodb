@@ -8,16 +8,18 @@ import {
   updatedContactController,
 } from "../controllers/contactController.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
+import { authenticate } from "../middlewares/authenticate.js";
+
 dotenv.config();
 const router = Router();
 router.get("/", (req, res) => {
   res.send("server is working");
 });
 
-router.get("/all", ctrlWrapper(getAllContacts));
-router.get("/:id", ctrlWrapper(getContactsById));
-router.post("/", ctrlWrapper(createContact));
-router.patch("/:id", ctrlWrapper(updatedContactController));
-router.delete("/:id", ctrlWrapper(deleteContactController));
+router.get("/all", authenticate, ctrlWrapper(getAllContacts));
+router.get("/:id", authenticate, ctrlWrapper(getContactsById));
+router.post("/", authenticate, ctrlWrapper(createContact));
+router.patch("/:id", authenticate, ctrlWrapper(updatedContactController));
+router.delete("/:id", authenticate, ctrlWrapper(deleteContactController));
 
 export default router;

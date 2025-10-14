@@ -4,6 +4,7 @@ import {
   loginUser,
   registerUser,
   refreshTokenSession,
+  logoutService,
 } from "../services/auth.js";
 
 const setupSession = (res, session) => {
@@ -26,6 +27,7 @@ const setupSession = (res, session) => {
 
 export const registerController = async (req, res) => {
   const user = await registerUser(req.body);
+  console.log("user oluşturuldu", user._id);
 
   res.status(201).json({
     success: true,
@@ -60,4 +62,13 @@ export const refreshTokenController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const logoutController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await logoutService(req.cookies.sessionId);
+    res.clearCookie(sessionId);
+    res.clearCookie(refreshToken);
+    return res.status(204);
+  }
 };

@@ -45,6 +45,7 @@ export const createContact = async (req, res, next) => {
     });
   }
   const newContact = await createNewContact({
+    userId: req.user._id,
     name: req.body.name,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
