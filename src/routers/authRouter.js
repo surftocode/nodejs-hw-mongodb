@@ -5,7 +5,7 @@ import {
   logoutController,
   registerController,
 } from "../controllers/auth.js";
-import { User } from "../db/models/user.js";
+import User from "../db/models/user.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { userSchema } from "../db/models/user.js";
 import { validateBody } from "../validation/validateUser.js";
@@ -17,15 +17,10 @@ router.get("/", (req, res) => {
   res.send("auth router is working");
 });
 
-router.post("/register", 
-validateBody(User), 
-ctrlWrapper(registerController));
+router.post("/register", validateBody(User), ctrlWrapper(registerController));
 
-router.post("/login", 
-ctrlWrapper(loginUserController));
+router.post("/login", ctrlWrapper(loginUserController));
 
-router.post("/logout",
- authenticate,
- ctrlWrapper(logoutController));
+router.post("/logout", authenticate, ctrlWrapper(logoutController));
 
 export default router;
