@@ -36,6 +36,7 @@ export const setupServer = async () => {
   await initMongoConnection();
   app.use("/api/contacts", contactRouter);
   app.use("/api/auth", authRouter);
+  
 
   app.use(notFoundHandler);
   app.use(errorHandler);

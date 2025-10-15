@@ -1,5 +1,5 @@
 import { ONE_MONTH, FIFTEEN_MINUTES } from "../constants/index.js";
-import cookie from "cookie-parser";
+
 import {
   loginUser,
   registerUser,
@@ -33,11 +33,23 @@ export const registerController = async (req, res) => {
     success: true,
     status: 201,
     message: "Successfully registered a user!",
-    data: user,
+   data:user,
+    token:accessToken
   });
+
+
+
 };
 
 export const loginUserController = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Email and password are required",
+    });
+  }
+
   const session = await loginUser(req.body);
   setupSession(res, session);
   res.status(200).json({

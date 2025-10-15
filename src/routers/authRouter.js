@@ -5,9 +5,8 @@ import {
   logoutController,
   registerController,
 } from "../controllers/auth.js";
-import User from "../db/models/user.js";
+import { registerSchema, loginSchema } from "../validation/userSchemas.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
-import { userSchema } from "../db/models/user.js";
 import { validateBody } from "../validation/validateUser.js";
 import { authenticate } from "../middlewares/authenticate.js";
 dotenv.config();
@@ -17,10 +16,22 @@ router.get("/", (req, res) => {
   res.send("auth router is working");
 });
 
-router.post("/register", validateBody(User), ctrlWrapper(registerController));
+router.post(
+  "/register",
+  validateBody(registerSchema),
+  ctrlWrapper(registerController)
+);
 
-router.post("/login", ctrlWrapper(loginUserController));
+
+router.post(
+  "/login",
+  
+  validateBody(loginSchema),
+  ctrlWrapper(loginUserController)
+);
 
 router.post("/logout", authenticate, ctrlWrapper(logoutController));
+
+
 
 export default router;
