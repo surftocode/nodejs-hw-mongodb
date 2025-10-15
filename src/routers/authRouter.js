@@ -5,6 +5,7 @@ import {
   logoutController,
   registerController,
 } from "../controllers/auth.js";
+import { User } from "../db/models/user.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { userSchema } from "../db/models/user.js";
 import { validateBody } from "../validation/validateUser.js";
