@@ -1,4 +1,5 @@
 import { ONE_MONTH, FIFTEEN_MINUTES } from "../constants/index.js";
+import mongoose from "mongoose";
 
 import {
   loginUser,
@@ -26,19 +27,15 @@ const setupSession = (res, session) => {
 };
 
 export const registerController = async (req, res) => {
-  const user = await registerUser(req.body);
-  console.log("user oluşturuldu", user._id);
+  const newUser = await registerUser(req.body);
+  console.log("newUser oluşturuldu", newUser._id);
 
   res.status(201).json({
     success: true,
     status: 201,
-    message: "Successfully registered a user!",
-   data:user,
-    token:accessToken
+    message: "Successfully registered a newUser!",
+    data: newUser,
   });
-
-
-
 };
 
 export const loginUserController = async (req, res) => {
@@ -55,7 +52,7 @@ export const loginUserController = async (req, res) => {
   res.status(200).json({
     status: 200,
     success: true,
-    message: "Successfully logged in an user!",
+    message: "Successfully logged in an newUser!",
     data: session,
   });
 };

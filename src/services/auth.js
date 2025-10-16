@@ -7,12 +7,13 @@ import { FIFTEEN_MINUTES, ONE_MONTH } from "../constants/index.js";
 
 export const registerUser = async (payload) => {
   console.log("incoming payload:", payload);
-  const user = await User.findOne({ email: payload.email });
-  console.log("user var",user);
-  if (user) throw createHttpError(409, "Email in use");
+  payload.email = payload.email.trim().toLowerCase();
+  const existingUser = await User.findOne({ email: payload.email });
+  console.log("user var:", existingUser);
+  if (existingUser) throw createHttpError(409, "Email has already been added");
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
-  payload.email = payload.email.trim().toLowerCase();
+
   return User.create({
     ...payload,
     password: encryptedPassword,

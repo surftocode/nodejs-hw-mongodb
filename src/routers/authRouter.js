@@ -25,7 +25,6 @@ router.post(
 
 router.post(
   "/login",
-  
   validateBody(loginSchema),
   ctrlWrapper(loginUserController)
 );

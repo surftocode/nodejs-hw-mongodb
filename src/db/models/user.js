@@ -17,28 +17,27 @@ export const userSchema = new mongoose.Schema(
       required: true,
     },
     createdAt: {
-        type:Date,
-        default:Date.now
+      type: Date,
+      default: Date.now,
     },
     updatedAt: {
-        type:Date,
-        default:Date.now
+      type: Date,
+      default: Date.now,
     },
   },
   {
-     timestamps:{
-      createdAt:true,
-      updatedAt:true,
-     } 
-});
+    timestamps: {
+      createdAt: true,
+      updatedAt: true,
+    },
+  }
+);
 
-
-userSchema.methods.toJson=function(){
-  const obj= this.object();
+userSchema.methods.toJson = function () {
+  const obj = this.object();
   delete obj.password;
   return obj;
-}
+};
 
-const User=
-mongoose.model("User",userSchema)
+const User = mongoose.model("User", userSchema);
 export default User;
