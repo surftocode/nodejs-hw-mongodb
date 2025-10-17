@@ -7,11 +7,13 @@ import {
   refreshTokenSession,
   logoutService,
 } from "../services/auth.js";
+import User from "../db/models/session.js";
+import createHttpError from "http-errors";
 
 const setupSession = (res, session) => {
   res.cookie("refreshToken", session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + ONE_MONTH),
   });
 
   res.cookie("sessionId", session._id, {
@@ -38,22 +40,27 @@ export const registerController = async (req, res) => {
   });
 };
 
-export const loginUserController = async (req, res) => {
+export const loginUserController = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: "Email and password are required",
-    });
+    return next(createHttpError(400, "Email and password are required"));
   }
-
-  const session = await loginUser(req.body);
+  console.log("Incoming payload:", req.body);
+  const { user, session } = await loginUser(req.body);
+  console.log("User found:", session);
   setupSession(res, session);
+
   res.status(200).json({
     status: 200,
     success: true,
     message: "Successfully logged in an newUser!",
-    data: session,
+    data: {
+      accessToken: session.accessToken,
+      user: {
+        id: user._id, 
+        email: user.email,
+      },
+    },
   });
 };
 
@@ -76,8 +83,8 @@ export const refreshTokenController = async (req, res) => {
 export const logoutController = async (req, res) => {
   if (req.cookies.sessionId) {
     await logoutService(req.cookies.sessionId);
-    res.clearCookie(sessionId);
-    res.clearCookie(refreshToken);
+    res.clearCookie("sessionId");
+    res.clearCookie("refreshToken");
     return res.status(204);
   }
 };

@@ -43,12 +43,13 @@ export const loginUser = async (payload) => {
   await Session.deleteOne({
     userId: user._id,
   });
-  const session = createSession();
+  const sessionData = createSession();
 
-  return Session.create({
-    ...session,
+  const session = await Session.create({
+    ...sessionData,
     userId: user._id,
   });
+  return { user, session };
 };
 
 export const refreshTokenSession = async ({ sessionId, refreshToken }) => {
@@ -66,12 +67,11 @@ export const refreshTokenSession = async ({ sessionId, refreshToken }) => {
     throw createHttpError(401, " Token is expired.");
   }
 
-  const newSession = createSession();
-
   await Session.deleteOne({
     _id: sessionId,
     refreshToken,
   });
+  const newSession = createSession();
 
   return Session.create({
     userId: session.userId,

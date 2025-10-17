@@ -3,9 +3,9 @@ import Session from "../db/models/session.js";
 import User from "../db/models/user.js";
 
 export const authenticate = async (req, res, next) => {
-  const authHeader = req.get("Authorization");
+  const authHeader = req.headers.authorization;
   if (!authHeader) {
-    next(createHttpError(401, "Authorization header is missing"));
+     next(createHttpError(401, "Authorization header is missing"));
     return;
   }
   const bearer = authHeader.split(" ")[0];
