@@ -4,6 +4,11 @@ import {
 } from "../controllers/contactController.js";
 ("");
 
+export const fetchAllContacts= async ()=>{
+  const contacts= await getAllContacts();
+  return contacts;
+}
+
 //contact eklemek
 export const createNewContact = async (data) => {
   const newContact = await getAllContacts.create(data);
