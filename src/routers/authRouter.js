@@ -29,7 +29,7 @@ router.post(
   ctrlWrapper(loginUserController)
 );
 
-router.post("/logout", authenticate, ctrlWrapper(logoutController));
+router.post("/logout", ctrlWrapper(logoutController));
 
 
 

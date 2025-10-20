@@ -81,4 +81,5 @@ export const refreshTokenSession = async ({ sessionId, refreshToken }) => {
 
 export const logoutService = async (sessionId) => {
   await Session.deleteOne({ _id: sessionId });
+  
 };
