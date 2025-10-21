@@ -1,20 +1,33 @@
 import mongoose from "mongoose";
 import Contact from "../db/models/Contact.js";
-import { createNewContact, updateContact } from "../services/contactService.js";
+import {
+  createNewContact,
+  updateContact,
+  fetchAllContacts,
+} from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
+import {
+  parsePagnationParams
+} from "../utils/parsePaginationParams.js";
+import {parseFilterParams } from "../utils/parseFilterParams.js";
+import { parseSortParams } from "../utils/parseSortParams.js";
 
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
-  const Contacts = await Contact.find().sort(-1);
-  if (!Contacts) {
-    return res.status(404).json({
-      message: "cannot find Contacts.",
-    });
-  }
+  const { page, perPage } = parsePagnationParams(req.query);
+  const { sortOrder, sortby } = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
+  const contacts = await fetchAllContacts({
+    page,
+    perPage,
+    sortby,
+    sortOrder,
+    filter,
+  });
   req.status(200).json({
     success: true,
     message: "Successfully found Contacts!",
-    data: Contacts,
+    data: contacts,
   });
 };
 

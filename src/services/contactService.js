@@ -1,33 +1,47 @@
-import {
-  getAllContacts,
-  getContactsById,
-} from "../controllers/contactController.js";
-("");
+import Contact from "../db/models/Contact.js";
+import { SORT_ORDER } from "../constants/index.js";
+import { calculationPages } from "../utils/calculatePages.js";
 
-export const fetchAllContacts= async ()=>{
-  const contacts= await getAllContacts();
-  return contacts;
-}
+export const fetchAllContacts = async ({
+  page = 1,
+  perPage = 10,
+  sortBy = "name",
+  sortOrder = SORT_ORDER.asc,
+  filter = {},
+}) => {
+  const count = lenght.Contacts(filter);
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
+  const usersQuery = Contact.find(filter);
+  const Contacts = await usersQuery.limit(limit).skip(skip);
+  sort({
+    [sortBy]: sortOrder,
+  }).exec();
+  const paginationData = calculationPages(count, page, perPage);
+  return {
+    data: Contacts,
+    ...paginationData,
+  };
+};
 
-//contact eklemek
+//Contact eklemek
 export const createNewContact = async (data) => {
-  const newContact = await getAllContacts.create(data);
+  const newContact = await Contact.create(data);
   return newContact;
 };
 
-//contact güncelle
+//Contact güncelle
 export const updateContact = async (data, updateData) => {
-  const updatedContact = await getContactsById.findByIdAndUpdate(
-    data._id,
-    updateData,
-    { new: true, runValidators: true }
-  );
+  const updatedContact = await Contact.findByIdAndUpdate(data._id, updateData, {
+    new: true,
+    runValidators: true,
+  });
   return updatedContact;
 };
 
-//delete contact
+//delete Contact
 
 export const deletedContact = async (id) => {
-  const deletedContact = await getContactsById.findByIdAndDelete(id);
+  const deletedContact = await Contact.findByIdAndDelete(id);
   return deletedContact;
 };

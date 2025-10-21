@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
   res.send("server is working");
 });
 
-router.get("/all", authenticate, ctrlWrapper(getAllContacts));
+router.get("/all", ctrlWrapper(getAllContacts));
 router.get("/:id", authenticate, ctrlWrapper(getContactsById));
 router.post("/", authenticate, ctrlWrapper(createContact));
 router.patch("/:id", authenticate, ctrlWrapper(updatedContactController));
