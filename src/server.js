@@ -11,6 +11,14 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 export const setupServer = async () => {
+  app.use(
+    cors({
+      origin: process.env.PORT || "*",
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+    })
+  );
   const app = express();
   app.use(
     express.json({
@@ -30,12 +38,10 @@ export const setupServer = async () => {
   });
   app.use(logger);
 
-  app.use(cors());
   app.use(cookieParser());
   await initMongoConnection();
   app.use("/api/contacts", contactRouter);
   app.use("/api/auth", authRouter);
-  
 
   app.use(notFoundHandler);
   app.use(errorHandler);
