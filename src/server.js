@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 export const setupServer = async () => {
+  const app = express();
   app.use(
     cors({
       origin: process.env.PORT || "*",
@@ -19,7 +20,6 @@ export const setupServer = async () => {
       allowedHeaders: ["Content-Type", "Authorization"],
     })
   );
-  const app = express();
   app.use(
     express.json({
       type: ["application/json", "application/vnd.api+json"],
