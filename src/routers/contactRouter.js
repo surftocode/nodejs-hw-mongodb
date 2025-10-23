@@ -12,11 +12,11 @@ import { authenticate } from "../middlewares/authenticate.js";
 
 dotenv.config();
 const router = Router();
-router.get("/", (req, res) => {
-  res.send("server is working");
-});
+// router.get("/", (req, res) => {
+//   res.send("server is working");
+// });
 
-router.get("/all", ctrlWrapper(getAllContacts));
+router.get("/", ctrlWrapper(getAllContacts));
 router.get("/:id", authenticate, ctrlWrapper(getContactsById));
 router.post("/", authenticate, ctrlWrapper(createContact));
 router.patch("/:id", authenticate, ctrlWrapper(updatedContactController));

@@ -9,17 +9,20 @@ export const fetchAllContacts = async ({
   sortOrder = SORT_ORDER.asc,
   filter = {},
 }) => {
-  const count = lenght.Contacts(filter);
+  const count = Contact.countDocuments(filter);
   const limit = perPage;
   const skip = (page - 1) * perPage;
   const usersQuery = Contact.find(filter);
-  const Contacts = await usersQuery.limit(limit).skip(skip);
-  sort({
-    [sortBy]: sortOrder,
-  }).exec();
+  const contacts = await usersQuery
+    .limit(limit)
+    .skip(skip)
+    .sort({
+      [sortBy]: sortOrder,
+    })
+    .exec();
   const paginationData = calculationPages(count, page, perPage);
   return {
-    data: Contacts,
+    data: contacts,
     ...paginationData,
   };
 };
