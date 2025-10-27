@@ -40,8 +40,8 @@ export const setupServer = async () => {
 
   app.use(cookieParser());
   await initMongoConnection();
-  app.use("/api/contacts", contactRouter);
-  app.use("/api/auth", authRouter);
+  app.use("/contacts", contactRouter);
+  app.use("/auth", authRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
