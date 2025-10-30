@@ -57,7 +57,7 @@ export const loginUserController = async (req, res, next) => {
     data: {
       accessToken: session.accessToken,
       user: {
-        id: user._id, 
+        id: user._id,
         email: user.email,
       },
     },
@@ -86,7 +86,7 @@ export const logoutController = async (req, res) => {
     res.clearCookie("sessionId");
     res.clearCookie("refreshToken");
     return res.status(204).json({
-      success:true,
+      success: true,
       message: "Successfully logged out!",
     });
   }

@@ -1,30 +1,10 @@
 import Contact from "../db/models/Contact.js";
-import { SORT_ORDER } from "../constants/index.js";
-import { calculationPages } from "../utils/calculatePages.js";
 
-export const fetchAllContacts = async ({
-  page = 1,
-  perPage = 10,
-  sortBy = "name",
-  sortOrder = SORT_ORDER.asc,
-  filter = {},
-}) => {
-  const count = Contact.countDocuments(filter);
-  const limit = perPage;
-  const skip = (page - 1) * perPage;
-  const usersQuery = Contact.find({ filter });
-  const contacts = await usersQuery
-    .limit(limit)
-    .skip(skip)
-    .sort({
-      [sortBy]: sortOrder,
-    })
-    .exec();
-  const paginationData = calculationPages(count, page, perPage);
-  
+export const fetchAllContacts = async (userId) => {
+  const contacts = await Contact.find({userId});
+
   return {
     data: contacts,
-    ...paginationData,
   };
 };
 

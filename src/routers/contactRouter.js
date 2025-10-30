@@ -8,8 +8,8 @@ import {
   updatedContactController,
 } from "../controllers/contactController.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
-import { authenticate } from "../middlewares/authenticate.js";
 import Contact from "../db/models/Contact.js";
+import { authenticate } from "../middlewares/authenticate.js";
 
 dotenv.config();
 const router = Router();
@@ -26,7 +26,7 @@ router.get("/debug", async (req, res) => {
       environment: process.env.NODE_ENV,
     });
   } catch (error) {
-    es.status(500).json({
+    res.status(500).json({
       status: "ERROR",
       database: "Disconnected",
       environment: process.env.NODE_ENV,
@@ -34,10 +34,10 @@ router.get("/debug", async (req, res) => {
     });
   }
 });
-router.get("/", ctrlWrapper(getAllContacts));
-router.get("/:id", ctrlWrapper(getContactsById));
-router.post("/", ctrlWrapper(createContact));
-router.patch("/:id", ctrlWrapper(updatedContactController));
-router.delete("/:id", ctrlWrapper(deleteContactController));
+router.get("/", authenticate, ctrlWrapper(getAllContacts));
+router.get("/:id", authenticate, ctrlWrapper(getContactsById));
+router.post("/", authenticate, ctrlWrapper(createContact));
+router.patch("/:id", authenticate, ctrlWrapper(updatedContactController));
+router.delete("/:id", authenticate, ctrlWrapper(deleteContactController));
 
 export default router;

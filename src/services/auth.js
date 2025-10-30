@@ -49,6 +49,8 @@ export const loginUser = async (payload) => {
     ...sessionData,
     userId: user._id,
   });
+
+
   return { user, session };
 };
 

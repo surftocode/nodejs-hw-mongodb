@@ -4,22 +4,13 @@ import {
   fetchAllContacts,
 } from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-import { parsePagnationParams } from "../utils/parsePaginationParams.js";
-import { parseFilterParams } from "../utils/parseFilterParams.js";
-import { parseSortParams } from "../utils/parseSortParams.js";
+
 
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
-  const { page, perPage } = parsePagnationParams(req.query);
-  const { sortOrder, sortBy } = parseSortParams(req.query);
-  const filter = parseFilterParams(req.query);
-  const contacts = await fetchAllContacts({
-    page,
-    perPage,
-    sortBy,
-    sortOrder,
-    filter,
-  });
+
+  const contacts=await fetchAllContacts(req.user._id);
+  console.log("contacts found:", contacts.data?.length || 0);
   res.status(200).json({
     success: true,
     message: "Successfully found Contacts!",
