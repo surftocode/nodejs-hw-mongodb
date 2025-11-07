@@ -4,6 +4,7 @@ import {
   fetchAllContacts,
 } from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
+import { resetPassword } from "../services/auth.js";
 
 
 //Tüm Contact listesini almak7
@@ -86,3 +87,12 @@ export const deleteContactController = async (req, res) => {
 
   res.status(204).end();
 };
+
+
+export const resetPasswordController= async(req,res)=>{
+  await resetPassword(req.body.email);
+  res.status(200).json({
+    message:"Your password is succeffuly changed",
+    data:{}
+  })
+}

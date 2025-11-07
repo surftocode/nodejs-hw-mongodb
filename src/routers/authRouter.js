@@ -4,11 +4,13 @@ import {
   loginUserController,
   logoutController,
   registerController,
+  requestResetEmailController,
 } from "../controllers/auth.js";
-import { registerSchema, loginSchema } from "../validation/userSchemas.js";
+import { registerSchema, loginSchema, requestResetEmailSchema, resetPasswordSchema } from "../validation/userSchemas.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { validateBody } from "../validation/validateUser.js";
 import { authenticate } from "../middlewares/authenticate.js";
+import { resetPasswordController } from "../controllers/contactController.js";
 dotenv.config();
 const router = Router();
 
@@ -30,7 +32,8 @@ router.post(
 );
 
 router.post("/logout", ctrlWrapper(logoutController));
-
+router.post("/send-reset-email",validateBody(requestResetEmailSchema),ctrlWrapper(requestResetEmailController))
+router.post("/reset-password",validateBody(resetPasswordSchema),ctrlWrapper(resetPasswordController))
 
 
 export default router;
