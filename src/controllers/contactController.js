@@ -4,7 +4,10 @@ import {
   fetchAllContacts,
 } from "../services/contactService.js";
 import { notFoundHandler } from "../middlewares/notFoundHandler.js";
-import { resetPassword } from "../services/auth.js";
+import Contact from "../db/models/Contact.js";
+import { CLOUDINARY } from "../constants/index.js";
+import { saveFileToCloudinary } from "../utils/saveFileToCloudinary.js";
+import { saveFileToUploadDir } from "../utils/saveFileUploadDir.js";
 
 //Tüm Contact listesini almak7
 export const getAllContacts = async (req, res) => {
@@ -85,3 +88,35 @@ export const deleteContactController = async (req, res) => {
 
   res.status(204).end();
 };
+
+
+export const updateContactPhotoController= async (req,res)=>{
+  const file=req.file;
+  const enableCloudinary=CLOUDINARY.CLOUDINARY_ENABLE==='true';
+  if(!file) {
+    return res.status(400).json({
+      success:false,
+      message:"Please uplad a photo",
+
+    })
+  }
+
+  let photoUrl;
+  if(enableCloudinary){
+    photoUrl= await saveFileToCloudinary(file);
+
+  }else{
+    const fileName=await saveFileToUploadDir(file)
+    photoUrl=`uploads/${fileName}`;
+  }
+res.status(200).json({
+  success:true,
+  message:"Photo uploaded succesfully",
+  data:{
+    photoUrl,
+  }
+})
+
+
+
+}

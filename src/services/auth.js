@@ -9,8 +9,8 @@ import {
   TEMPLATE_DIR,
 } from "../constants/index.js";
 import jwt from "jsonwebtoken";
-import { env } from "../utils/environment.js";
-import { sendEmail } from "../utils/email.js";
+import { env } from "../utils/env.js";
+import { sendEmail } from "../utils/sendEmail.js";
 import handlebars from "handlebars";
 import path from "node:path";
 import fs from "node:fs/promises";

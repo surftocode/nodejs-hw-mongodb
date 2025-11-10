@@ -15,7 +15,7 @@ import {
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { validateBody } from "../validation/validateUser.js";
 import { authenticate } from "../middlewares/authenticate.js";
-import { resetPasswordController } from "../controllers/contactController.js";
+import { resetPasswordController } from "../controllers/auth.js";
 dotenv.config();
 const router = Router();
 
@@ -42,7 +42,7 @@ router.post(
   requestResetEmailController
 );
 router.post(
-  "/reset-password",
+  "/reset-pwd",
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController)
 );
