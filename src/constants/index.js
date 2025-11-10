@@ -1,6 +1,6 @@
 import path from "node:path";
 import fs from "node:fs/promises";
-import { env } from "../utils/env.js";
+
 
 export const FIFTEEN_MINUTES = 1000 * 60 * 15;
 export const ONE_MONTH = 1000 * 60 * 60 * 24 * 30;
@@ -24,9 +24,9 @@ export const TEMPLATE_UPLOAD_DIR = path.join(process.cwd(), "temps");
 export const UPLOAD_DIR = path.join(process.cwd(), "uploads");
 
 export const CLOUDINARY = {
-  CLOUDINARY_CLOUD_NAME: env("CLOUDINARY_CLOUD_NAME"),
-  CLOUDINARY_API_KEY: env("CLOUDINARY_API_KEY"),
-  CLOUDINARY_API_SECRET: env("CLOUDINARY_API_SECRET"),
+  CLOUDINARY_CLOUD_NAME: "CLOUDINARY_CLOUD_NAME",
+  CLOUDINARY_API_KEY: "CLOUDINARY_API_KEY",
+  CLOUDINARY_API_SECRET: "CLOUDINARY_API_SECRET",
 };
 
 export const APP_DOMAIN = env("APP_DOMAIN");
