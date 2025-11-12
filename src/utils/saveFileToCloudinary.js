@@ -1,12 +1,16 @@
 import { v2 as cloudinary } from "cloudinary";
 import { CLOUDINARY } from "../constants/index.js";
-import { env } from "../utils/env.js";
+import dotenv from "dotenv";
+
 import fs from "fs/promises";
 
+dotenv.config();
+console.log("Cloudinary objects", CLOUDINARY);
+
 cloudinary.config({
-  cloud_name: env(CLOUDINARY.CLOUDINARY_NAME),
-  api_key: env(CLOUDINARY.CLOUDINARY_API_KEY),
-  api_secret: env(CLOUDINARY.CLOUDINARY_API_SECRET),
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 console.log("CLOUDINARY object:", CLOUDINARY);
 export const saveFileToCloudinary = async (file) => {
