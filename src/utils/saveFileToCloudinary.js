@@ -5,8 +5,6 @@ import dotenv from "dotenv";
 import fs from "fs/promises";
 
 dotenv.config();
-console.log("Cloudinary objects", CLOUDINARY);
-
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,

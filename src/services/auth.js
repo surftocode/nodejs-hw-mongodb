@@ -103,12 +103,13 @@ export const requestResetToken = async (email) => {
   const resetToken = jwt.sign(
     {
       data: user._id,
-      email,
+      email:user.email,
     },
     env("JWT_SECRET"),
     {
       expiresIn: "1h",
     }
+  
   );
 
   const resetPasswordTemplatePath = path.join(
@@ -123,13 +124,13 @@ export const requestResetToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: '${env("APP_DOMAIN")}/resert-email?token=${resetToken}',
+    link: `${env("APP_DOMAIN")}/resert-email?token=${resetToken}`,
   });
   await sendEmail({
     from: env(SMTP_FROM),
     to: email,
     subject: "Şifre sıfırlama ekranı ✔",
-    text: "Şifreni sıfıtlamak mı istiyorsun?", // plain‑text body
+    text: "Şifreni sıfırlamak mı istiyorsun?", // plain‑text body
     html,
   });
 };

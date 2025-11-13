@@ -108,9 +108,18 @@ export const requestResetEmailController = async (req, res) => {
 };
 
 export const resetPasswordController = async (req, res) => {
+  if(!req.body.email){
+    return res.status(400).json({
+      success:false,
+      message: "Email is required",
+    
+    });
+  }
+
   await resetPassword(req.body.email);
   res.status(200).json({
-    message: "Your password is succeffuly changed",
+    message: "your password has been reset successfully",
     data: {},
   });
+
 };
