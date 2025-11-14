@@ -11,12 +11,13 @@ export const SORT_ORDER = {
 };
 
 export const SMTP = {
-  SMTP_SERVER: "SMTP_SERVER",
-  SMTP_PORT: "SMTP_PORT",
-  SMTP_LOGIN: "SMTP_LOGIN",
-  SMTP_PASSWORD: "SMTP_PASSWORD",
-  SMTP_FROM: "SMTP_FROM",
+  SMTP_SERVER: env("SMTP_SERVER"),
+  SMTP_PORT: env("SMTP_PORT"),
+  SMTP_LOGIN: env("SMTP_LOGIN"),
+  SMTP_PASSWORD: env("SMTP_PASSWORD"),
+  SMTP_FROM: env("SMTP_FROM"),
 };
+console.log(SMTP);
 
 export const TEMPLATE_DIR = path.join(process.cwd(), "src", "templates");
 

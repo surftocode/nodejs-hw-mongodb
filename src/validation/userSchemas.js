@@ -36,7 +36,7 @@ export const loginSchema = Joi.object({
 
 export const requestResetEmailSchema = Joi.object({
   email: Joi.string().required().messages({
-    "strig.email": "Please enter a valid email",
+    "string.email": "Please enter a valid email",
   }),
 });
 

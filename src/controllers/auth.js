@@ -94,6 +94,8 @@ export const logoutController = async (req, res) => {
 
 export const requestResetEmailController = async (req, res) => {
   try {
+    console.log('🎯 Reset password request başladı');
+    console.log('📧 Email:', req.body.email);
     await requestResetToken(req.body.email);
     res.status(200).json({
       message: "Reset email sent successfully",
@@ -108,11 +110,10 @@ export const requestResetEmailController = async (req, res) => {
 };
 
 export const resetPasswordController = async (req, res) => {
-  if(!req.body.email){
+  if (!req.body.email) {
     return res.status(400).json({
-      success:false,
+      success: false,
       message: "Email is required",
-    
     });
   }
 
@@ -121,5 +122,4 @@ export const resetPasswordController = async (req, res) => {
     message: "your password has been reset successfully",
     data: {},
   });
-
 };

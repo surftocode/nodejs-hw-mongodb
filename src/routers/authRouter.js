@@ -41,6 +41,16 @@ router.post(
   validateBody(requestResetEmailSchema),
   requestResetEmailController
 );
+
+router.post(
+  "/request-reset-pwd",
+  (req, res, next) => {
+    console.log("Router’a giriş yaptı");
+    next();
+  },
+  validateBody(requestResetEmailSchema),
+  requestResetEmailController
+);
 router.post(
   "/reset-pwd",
   validateBody(resetPasswordSchema),

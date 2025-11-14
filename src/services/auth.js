@@ -103,7 +103,7 @@ export const requestResetToken = async (email) => {
   const resetToken = jwt.sign(
     {
       data: user._id,
-      email:user.email,
+      email:email,
     },
     env("JWT_SECRET"),
     {
@@ -124,7 +124,7 @@ export const requestResetToken = async (email) => {
   const template = handlebars.compile(templateSource);
   const html = template({
     name: user.name,
-    link: `${env("APP_DOMAIN")}/resert-email?token=${resetToken}`,
+    link: `${env("APP_DOMAIN")}/reset-email?token=${resetToken}`,
   });
   await sendEmail({
     from: env(SMTP_FROM),
