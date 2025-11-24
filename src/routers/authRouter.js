@@ -14,9 +14,9 @@ import {
 } from "../validation/userSchemas.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { validateBody } from "../validation/validateUser.js";
-import { authenticate } from "../middlewares/authenticate.js";
 import { resetPasswordController } from "../controllers/auth.js";
 dotenv.config();
+
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -36,21 +36,17 @@ router.post(
 );
 
 router.post("/logout", ctrlWrapper(logoutController));
-router.post(
-  "/send-reset-email",
-  validateBody(requestResetEmailSchema),
-  requestResetEmailController
-);
 
 router.post(
   "/request-reset-pwd",
   (req, res, next) => {
-    console.log("Router’a giriş yaptı");
+    console.log("request email çalıştı");
     next();
   },
   validateBody(requestResetEmailSchema),
-  requestResetEmailController
+  ctrlWrapper(requestResetEmailController)
 );
+
 router.post(
   "/reset-pwd",
   validateBody(resetPasswordSchema),

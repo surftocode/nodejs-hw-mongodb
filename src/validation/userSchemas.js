@@ -35,8 +35,9 @@ export const loginSchema = Joi.object({
 });
 
 export const requestResetEmailSchema = Joi.object({
-  email: Joi.string().required().messages({
+  email: Joi.string().required().email().messages({
     "string.email": "Please enter a valid email",
+    "string.empty": " Email cannot be empty",
   }),
 });
 
@@ -44,7 +45,7 @@ export const resetPasswordSchema = Joi.object({
   password: Joi.string().required().messages({
     "String.reqired": "Password is required",
   }),
-  token:Joi.string().required().messages({
+  token: Joi.string().required().messages({
     "String.reqired": "Token is required",
-  })
+  }),
 });

@@ -14,7 +14,7 @@ export const setupServer = async () => {
   const app = express();
   app.use(
     cors({
-      origin: process.env.PORT || "*",
+      origin: ["http://localhost:3000"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
@@ -41,16 +41,15 @@ export const setupServer = async () => {
   app.use(cookieParser());
   await initMongoConnection();
   app.use("/contacts", contactRouter);
+
   app.use("/auth", authRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
 
   app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server is running on port ${process.env.PORT || 3000}`);
+    console.log(`Server is running on port ${process.env.PORT || 3000} 🚀`);
   });
-  
-
 };
 
 setupServer();

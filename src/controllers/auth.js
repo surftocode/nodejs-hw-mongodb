@@ -20,12 +20,6 @@ const setupSession = (res, session) => {
     httpOnly: true,
     expires: new Date(Date.now() + FIFTEEN_MINUTES),
   });
-
-  res.status(200).json({
-    success: true,
-    message: "successfully having new session",
-    data: session.accessToken,
-  });
 };
 
 export const registerController = async (req, res) => {
@@ -46,22 +40,28 @@ export const loginUserController = async (req, res, next) => {
     return next(createHttpError(400, "Email and password are required"));
   }
   console.log("Incoming payload:", req.body);
-  const { user, session } = await loginUser(req.body);
-  console.log("User found:", session);
-  setupSession(res, session);
+  try {
+    const { user, session } = await loginUser(req.body);
+    console.log("User found:", session);
 
-  res.status(200).json({
-    status: 200,
-    success: true,
-    message: "Successfully logged in an newUser!",
-    data: {
-      accessToken: session.accessToken,
-      user: {
-        id: user._id,
-        email: user.email,
+    setupSession(res, session);
+
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: "Successfully logged in an newUser!",
+      data: {
+        accessToken: session.accessToken,
+        user: {
+          id: user._id,
+          email: user.email,
+        },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    return next(error);
+  }
 };
 
 export const refreshTokenController = async (req, res) => {
@@ -93,20 +93,14 @@ export const logoutController = async (req, res) => {
 };
 
 export const requestResetEmailController = async (req, res) => {
-  try {
-    console.log('🎯 Reset password request başladı');
-    console.log('📧 Email:', req.body.email);
-    await requestResetToken(req.body.email);
-    res.status(200).json({
-      message: "Reset email sent successfully",
-      data: {},
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to send the email, please try again later.",
-      error: error.message,
-    });
-  }
+  console.log("🎯 Reset password request başladı");
+  console.log("📧 Email:", req.body.email);
+  const email = req.body.email;
+  await requestResetToken(email);
+  res.status(200).json({
+    message: "Reset email sent successfully",
+    data: {},
+  });
 };
 
 export const resetPasswordController = async (req, res) => {

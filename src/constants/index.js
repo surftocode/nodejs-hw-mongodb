@@ -17,7 +17,6 @@ export const SMTP = {
   SMTP_PASSWORD: env("SMTP_PASSWORD"),
   SMTP_FROM: env("SMTP_FROM"),
 };
-console.log(SMTP);
 
 export const TEMPLATE_DIR = path.join(process.cwd(), "src", "templates");
 
@@ -27,8 +26,7 @@ export const UPLOAD_DIR = path.join(process.cwd(), "uploads");
 export const CLOUDINARY = {
   CLOUDINARY_CLOUD_NAME: "CLOUDINARY_CLOUD_NAME",
   CLOUDINARY_API_KEY: "CLOUDINARY_API_KEY",
-  CLOUDINARY_API_SECRET: "CLOUDINARY_API_SECRET"
+  CLOUDINARY_API_SECRET: "CLOUDINARY_API_SECRET",
 };
-// console.log(CLOUDINARY);
 
 export const APP_DOMAIN = env("APP_DOMAIN");
