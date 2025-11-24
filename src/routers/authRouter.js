@@ -40,7 +40,7 @@ router.post("/logout", ctrlWrapper(logoutController));
 router.post(
   "/request-reset-pwd",
   (req, res, next) => {
-    console.log("request email çalıştı");
+    console.log("POST /request-reset-pwd router’a geldi. Body:", req.body);
     next();
   },
   validateBody(requestResetEmailSchema),

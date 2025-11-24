@@ -102,14 +102,13 @@ export const requestResetToken = async (email) => {
 
   const resetToken = jwt.sign(
     {
-      data: user._id,
+      data: user._id.toString(),
       email: user.email,
     },
     env("JWT_SECRET"),
     {
       expiresIn: "1h",
     }
-  
   );
 
   const resetPasswordTemplatePath = path.join(
@@ -127,7 +126,7 @@ export const requestResetToken = async (email) => {
     link: `${env("APP_DOMAIN")}/reset-email?token=${resetToken}`,
   });
   await sendEmail({
-    from: env(SMTP_FROM),
+    from: env("SMTP_FROM"),
     to: user.email,
     subject: "Şifre sıfırlama ekranı ✔",
     text: "Şifreni sıfırlamak mı istiyorsun?", // plain‑text body
