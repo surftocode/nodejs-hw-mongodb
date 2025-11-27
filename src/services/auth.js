@@ -14,6 +14,8 @@ import { sendEmail } from "../utils/sendEmail.js";
 import handlebars from "handlebars";
 import path from "node:path";
 import fs from "node:fs/promises";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const registerUser = async (payload) => {
   console.log("incoming payload:", payload);
