@@ -129,6 +129,7 @@ export const requestResetToken = async (email) => {
     name: user.name,
     link: `${env("APP_DOMAIN")}/reset-email?token=${resetToken}`,
   });
+  console.log("📧 sendEmail çağrılıyor...");
   await sendEmail({
     from: env("SMTP_FROM"),
     to: user.email,
