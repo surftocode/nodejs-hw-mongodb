@@ -4,7 +4,7 @@ import { SMTP } from "../constants/index.js";
 const transporter = nodemailer.createTransport({
   host: SMTP.SMTP_SERVER,
   port: 587,
-  secure: false, // true for 465, false for other ports
+  secure: false,
   auth: {
     user: SMTP.SMTP_LOGIN,
     pass: SMTP.SMTP_PASSWORD,
@@ -12,6 +12,11 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendEmail = async (options) => {
-  const result = await transporter.sendMail(options);
-  return result;
+  try {
+    const result = await transporter.sendMail(options);
+    return result;
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
 };
