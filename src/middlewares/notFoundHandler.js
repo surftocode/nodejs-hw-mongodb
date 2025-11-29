@@ -1,10 +1,15 @@
-export const errorHandler = (err, req, res, next) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Server error";
-    
-    res.status(status).json({
-      success: false,
-      status: status,
-      message: message,
-    });
-  };
+import { HttpError } from "http-errors";
+
+
+export const notFoundHandler=(err,req,res,next)=>{
+    if(err instanceof HttpError){
+        return res.status(err.statusCode).json({
+            status:err.statusCode,
+            message:err.message,
+        })
+    }
+    res.status(404).json({
+        status:404,
+        message:"Route not found",
+    })
+}
