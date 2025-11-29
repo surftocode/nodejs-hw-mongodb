@@ -39,6 +39,10 @@ router.post("/logout", ctrlWrapper(logoutController));
 
 router.post(
   "/requestPassword",
+  (req, res, next) => {
+    console.log("request password route is okay");
+    next();
+  },
   validateBody(requestResetEmailSchema),
   ctrlWrapper(requestResetEmailController),
   (req, res, next) => {
