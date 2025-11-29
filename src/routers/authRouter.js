@@ -39,12 +39,11 @@ router.post("/logout", ctrlWrapper(logoutController));
 
 router.post(
   "/requestPassword",
-  (req, res, next) => {
-    console.log("POST /request-reset-pwd router’a geldi. Body:", req.body);
-    next();
-  },
   validateBody(requestResetEmailSchema),
-  ctrlWrapper(requestResetEmailController)
+  (req, res, next) => {
+    res.json({ message: "Validate okay" });
+    next()
+  }
 );
 
 router.post(
