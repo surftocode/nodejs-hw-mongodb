@@ -43,9 +43,8 @@ export const setupServer = async () => {
   app.use("/contacts", contactRouter);
 
   app.use("/auth", authRouter);
-
-  app.use(notFoundHandler);
   app.use(errorHandler);
+  app.use(notFoundHandler);
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server is running on port ${process.env.PORT || 3000} 🚀`);
