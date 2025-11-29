@@ -40,13 +40,10 @@ router.post("/logout", ctrlWrapper(logoutController));
 router.post(
   "/requestPassword",
   validateBody(requestResetEmailSchema),
+  ctrlWrapper(requestResetEmailController),
   (req, res, next) => {
-    res.json({ message: "Validate okay" });
-    ctrlWrapper(requestResetEmailController),(req, res, next)=>{
-      res.json({ message: "sent email controller is okay" });
-      next();
-    };
-   
+    res.json({ message: "sent email controller is okay" });
+    next();
   }
 );
 
