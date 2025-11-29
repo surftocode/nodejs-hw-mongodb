@@ -101,6 +101,7 @@ export const requestResetToken = async (email) => {
   if (!user) {
     throw createHttpError(404, "User could not found");
   }
+  console.log("✅ User bulundu, token oluşturuluyor");
 
   const resetToken = jwt.sign(
     {
