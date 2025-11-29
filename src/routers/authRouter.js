@@ -42,7 +42,11 @@ router.post(
   validateBody(requestResetEmailSchema),
   (req, res, next) => {
     res.json({ message: "Validate okay" });
-    next()
+    ctrlWrapper(requestResetEmailController),(req, res, next)=>{
+      res.json({ message: "sent email controller is okay" });
+      next();
+    };
+   
   }
 );
 
