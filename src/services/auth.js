@@ -136,6 +136,7 @@ export const requestResetToken = async (email) => {
     text: "Şifreni sıfırlamak mı istiyorsun?", // plain‑text body
     html,
   });
+  console.log("email gönderildi to:", user.email);
 };
 
 export const resetPassword = async (payload) => {
