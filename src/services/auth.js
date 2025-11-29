@@ -113,6 +113,7 @@ export const requestResetToken = async (email) => {
       expiresIn: "1h",
     }
   );
+  console.log("Token oluşturuldu:", resetToken);
 
   const resetPasswordTemplatePath = path.join(
     TEMPLATE_DIR,
