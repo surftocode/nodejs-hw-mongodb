@@ -115,29 +115,26 @@ export const requestResetToken = async (email) => {
   );
 
   console.log("Token oluşturuldu.")
+
   const html = await fs.readFile(
     "reset-password-email.html",
     "utf-8",
-    (err, data) => {
-      if (err) {
-        console.log("Error reading file:", err);
-        return;
-      }
-      return data;
-    }
+  
   );
 
-  const emailLink = handlebars.compile({
-    name: user.name,
-    link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
-  });
+  const emailLink = handlebars.compile(html);
+
+  const emailHtml=emailLink({
+    name:user.name,
+    link:`${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
+  })
   console.log("📧 sendEmail çağrılıyor...");
   await sendEmail({
     from: env("SMTP_FROM"),
     to: user.email,
     subject: "Reseting Password",
     text: "Change your password", // plain‑text body
-    html: html, // HTML body
+    html: emailHtml, // HTML body
   });
   console.log("Email has send to:", user.email);
 };
