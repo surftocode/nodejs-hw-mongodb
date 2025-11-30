@@ -116,7 +116,7 @@ export const requestResetToken = async (email) => {
 
   console.log("Token oluşturuldu.");
 
-  const Template_DIR = path.join(process.cwd(),"src", "templates");
+  const Template_DIR = path.join(process.cwd(), "src", "templates");
   const template_path = path.join(Template_DIR, "reset-password-email.html");
   console.log("template_path:", template_path);
 
@@ -130,7 +130,7 @@ export const requestResetToken = async (email) => {
     link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
   });
   console.log("📧 sendEmail çağrılıyor...");
-  await sendEmail({
+  sendEmail({
     from: env("SMTP_FROM"),
     to: user.email,
     subject: "Reseting Password",

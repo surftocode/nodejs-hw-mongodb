@@ -8,6 +8,7 @@ import authRouter from "./routers/authRouter.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import cookieParser from "cookie-parser";
+import timeout from "connect-timeout";
 dotenv.config();
 
 export const setupServer = async () => {
@@ -37,7 +38,7 @@ export const setupServer = async () => {
     },
   });
   app.use(logger);
-
+  app.use(timeout("120s"));
   app.use(cookieParser());
   await initMongoConnection();
   app.use("/contacts", contactRouter);
