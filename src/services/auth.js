@@ -99,9 +99,9 @@ export const logoutService = async (sessionId) => {
 export const requestResetToken = async (email) => {
   const user = await User.findOne({ email });
   if (!user) {
-    throw createHttpError(404, "User could not found");
+    throw createHttpError(404, "User is not exist!");
   }
-  console.log("✅ User bulundu, token oluşturuluyor");
+  console.log("User found!", user);
 
   const resetToken = jwt.sign(
     {
@@ -113,32 +113,78 @@ export const requestResetToken = async (email) => {
       expiresIn: "1h",
     }
   );
-  console.log("Token oluşturuldu:", resetToken);
 
-  const resetPasswordTemplatePath = path.join(
-    TEMPLATE_DIR,
-    "reset-password-email.html"
+  console.log("Token oluşturuldu.")
+  const html = await fs.readFile(
+    "reset-password-email.html",
+    "utf-8",
+    (err, data) => {
+      if (err) {
+        console.log("Error reading file:", err);
+        return;
+      }
+      return data;
+    }
   );
 
-  const templateSource = (
-    await fs.readFile("reset-password-email.html", "utf-8")
-  ).toString();
-
-  const template = handlebars.compile(templateSource);
-  const html = template({
+  const emailLink = handlebars.compile({
     name: user.name,
-    link: resetPasswordTemplatePath,
+    link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
   });
   console.log("📧 sendEmail çağrılıyor...");
   await sendEmail({
     from: env("SMTP_FROM"),
     to: user.email,
-    subject: "Şifre sıfırlama ekranı ✔",
-    text: "Şifreni sıfırlamak mı istiyorsun?", // plain‑text body
-    html,
+    subject: "Reseting Password",
+    text: "Change your password", // plain‑text body
+    html: html, // HTML body
   });
-  console.log("email gönderildi to:", user.email);
+  console.log("Email has send to:", user.email);
 };
+
+// export const requestResetToken = async (email) => {
+//   const user = await User.findOne({ email });
+//   if (!user) {
+//     throw createHttpError(404, "User could not found");
+//   }
+//   
+
+//   const resetToken = jwt.sign(
+//     {
+//       data: user._id.toString(),
+//       email: user.email,
+//     },
+//     env("JWT_SECRET"),
+//     {
+//       expiresIn: "1h",
+//     }
+//   );
+//   console.log("Token oluşturuldu:", resetToken);
+
+//   const resetPasswordTemplatePath = path.join(
+//     TEMPLATE_DIR,
+//     "reset-password-email.html"
+//   );
+
+//   const templateSource = (
+//     await fs.readFile("reset-password-email.html", "utf-8")
+//   ).toString();
+
+//   const template = handlebars.compile(templateSource);
+//   const html = template({
+//     name: user.name,
+//     link: resetPasswordTemplatePath,
+//   });
+//   console.log("📧 sendEmail çağrılıyor...");
+//   await sendEmail({
+//     from: env("SMTP_FROM"),
+//     to: user.email,
+//     subject: "Şifre sıfırlama ekranı ✔",
+//     text: "Şifreni sıfırlamak mı istiyorsun?", // plain‑text body
+//     html,
+//   });
+//   console.log("email gönderildi to:", user.email);
+// };
 
 export const resetPassword = async (payload) => {
   let entries;
