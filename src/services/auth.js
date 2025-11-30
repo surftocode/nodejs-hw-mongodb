@@ -116,7 +116,7 @@ export const requestResetToken = async (email) => {
 
   console.log("Token oluşturuldu.");
 
-  const Template_DIR = path.join(process.cwd(), "templates");
+  const Template_DIR = path.join(process.cwd(),"src", "templates");
   const template_path = path.join(Template_DIR, "reset-password-email.html");
   console.log("template_path:", template_path);
 
