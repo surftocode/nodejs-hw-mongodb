@@ -114,20 +114,21 @@ export const requestResetToken = async (email) => {
     }
   );
 
-  console.log("Token oluşturuldu.")
+  console.log("Token oluşturuldu.");
 
-  const html = await fs.readFile(
-    "reset-password-email.html",
-    "utf-8",
-  
-  );
+  const Template_DIR = path.join(process.cwd(), "src", "templates");
+  const template_path = path.join(Template_DIR, "reset-password-email.html");
+  console.log("template_path:", template_path);
+
+  const html = await fs.readFile(template_path, "utf-8");
+  console.log("template path okundu.");
 
   const emailLink = handlebars.compile(html);
 
-  const emailHtml=emailLink({
-    name:user.name,
-    link:`${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
-  })
+  const emailHtml = emailLink({
+    name: user.name,
+    link: `${env("APP_DOMAIN")}/reset-password?token=${resetToken}`,
+  });
   console.log("📧 sendEmail çağrılıyor...");
   await sendEmail({
     from: env("SMTP_FROM"),
@@ -144,7 +145,7 @@ export const requestResetToken = async (email) => {
 //   if (!user) {
 //     throw createHttpError(404, "User could not found");
 //   }
-//   
+//
 
 //   const resetToken = jwt.sign(
 //     {
