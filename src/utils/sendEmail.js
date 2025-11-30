@@ -16,7 +16,7 @@ export const sendEmail = async (options) => {
     console.log("Sending email with options:", options);
     console.log("SMTP CONFİG:", {
       host: SMTP.SMTP_SERVER,
-      port: 587,
+      port: 465,
       secure: false, // true for 465, false for other ports
       auth: {
         user: SMTP.SMTP_LOGIN,
