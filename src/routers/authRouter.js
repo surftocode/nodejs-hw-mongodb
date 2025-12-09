@@ -38,7 +38,7 @@ router.post(
 router.post("/logout", ctrlWrapper(logoutController));
 
 router.post(
-  "/requestPassword",
+  "/send-reset-email",
   (req, res, next) => {
     console.log("request password route is okay");
     next();
@@ -52,7 +52,7 @@ router.post(
 );
 
 router.post(
-  "/reset-pwd",
+  "/reset-password",
   validateBody(resetPasswordSchema),
   ctrlWrapper(resetPasswordController)
 );
