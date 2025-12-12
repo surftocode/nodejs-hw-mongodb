@@ -1,0 +1,12 @@
+{
+    "web": {
+      "client_id": "1091754215508-0q8i8hc4cgpld22gt5357updbd5ol4o0.apps.googleusercontent.com",
+      "project_id": "goit-480717",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_secret": "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",
+      "redirect_uris": ["http://localhost:3000/auth/confirm-oauth"]
+    }
+  }
+  

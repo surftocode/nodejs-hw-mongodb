@@ -9,6 +9,7 @@ import {
   requestResetToken,
 } from "../services/auth.js";
 import createHttpError from "http-errors";
+import { generateAuthUrl } from "../utils/googleOauth2.js";
 
 const setupSession = (res, session) => {
   res.cookie("refreshToken", session.refreshToken, {
@@ -99,7 +100,9 @@ export const requestResetEmailController = async (req, res) => {
   await requestResetToken(email);
   res.status(200).json({
     message: "Reset email sent successfully",
-    data: {},
+    data: {
+      token:res.accessToken
+    },
   });
 };
 
@@ -117,3 +120,15 @@ export const resetPasswordController = async (req, res) => {
     data: {},
   });
 };
+
+
+export const getGoogleAuthUrlController= async(req,res)=>{
+  const url =generateAuthUrl();
+  res.statatus(200).json({
+    success:true,
+    message:"Google OAuth2 URL generated successfully",
+    data:{
+      url
+    }
+  })
+}

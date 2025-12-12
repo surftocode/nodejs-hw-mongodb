@@ -1,6 +1,7 @@
 import { Router } from "express";
 import dotenv from "dotenv";
 import {
+  getGoogleAuthUrlController,
   loginUserController,
   logoutController,
   registerController,
@@ -62,5 +63,10 @@ router.post("/requestPassword11", (req, res) => {
     message: "route is okay.",
   });
 });
+
+
+router.post("/get-oauth-url",ctrlWrapper(getGoogleAuthUrlController))
+
+
 
 export default router;
