@@ -1,11 +1,13 @@
-import { googleOauth2 } from "google-auth-library";
+import { OAuth2Client } from "google-auth-library";
 import { readFile } from "fs/promises";
 import { env } from "./env.js";
 import createHttpError from "http-errors";
+import path from "path";
 
-const PATH_JSON = path.join(proccess.cwd(), "google-oauth2.json");
 
-const oauthConfig = json.parse(await readFile(PATH_JSON));
+const PATH_JSON = path.join(process.cwd(), "google-oauth2.json");
+
+const oauthConfig = JSON.parse(await readFile(PATH_JSON));
 const googleOauthClient = new OAuth2Client({
   clientId: env("GOOGLE_OAUTH2_CLIENT_ID"),
   clientSecret: env("GOOGLE_OAUTH2_CLIENT_SECRET"),
@@ -13,23 +15,26 @@ const googleOauthClient = new OAuth2Client({
 });
 
 export const generateAuthUrl = async () => {
-  googleOauthClient.generateAuthUrl({
+  return googleOauthClient.generateAuthUrl({
     scope: [
       "https://www.googleapis.com/auth/userinfo.profile",
       "https://www.googleapis.com/auth/userinfo.email",
     ],
   });
+  
 };
 
 export const validateCode = async (code) => {
-  const response = googleOauthClient.getToken(code);
+  const response =await googleOauthClient.getToken(code);
+  console.log("Google OAuth2 response:", response);
   if (!response.tokens.id_token) {
-    return createHttpError(401, "Unauthorized");
+    throw createHttpError(401, "Unauthorized");
   }
 
   const ticket = await googleOauthClient.verifyIdToken({
     idToken: response.tokens.id_token,
   });
+  console.log("Verified ID Token ticket:", ticket);
 
   return ticket;
 };

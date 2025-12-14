@@ -49,3 +49,7 @@ export const resetPasswordSchema = Joi.object({
     "String.reqired": "Token is required",
   }),
 });
+
+export const loginwithGoogleSchema = Joi.object({
+  code: Joi.string().required(),
+});

@@ -2,6 +2,7 @@ import { Router } from "express";
 import dotenv from "dotenv";
 import {
   getGoogleAuthUrlController,
+  loginOrRegisterGoogleController,
   loginUserController,
   logoutController,
   registerController,
@@ -12,6 +13,7 @@ import {
   loginSchema,
   requestResetEmailSchema,
   resetPasswordSchema,
+  loginwithGoogleSchema,
 } from "../validation/userSchemas.js";
 import { ctrlWrapper } from "../utils/ctrlWrapper.js";
 import { validateBody } from "../validation/validateUser.js";
@@ -64,9 +66,13 @@ router.post("/requestPassword11", (req, res) => {
   });
 });
 
+router.get("/get-oauth-url", 
+ctrlWrapper(getGoogleAuthUrlController));
 
-router.post("/get-oauth-url",ctrlWrapper(getGoogleAuthUrlController))
-
-
+router.get(
+  "confirm-oauth",
+  validateBody(loginwithGoogleSchema),
+  ctrlWrapper(loginOrRegisterGoogleController)
+);
 
 export default router;

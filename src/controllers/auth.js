@@ -101,7 +101,7 @@ export const requestResetEmailController = async (req, res) => {
   res.status(200).json({
     message: "Reset email sent successfully",
     data: {
-      token:res.accessToken
+      token: res.accessToken,
     },
   });
 };
@@ -121,14 +121,33 @@ export const resetPasswordController = async (req, res) => {
   });
 };
 
+export const getGoogleAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  console.log("Generated Google OAuth2 URL:", url);
+  res.status(200).json({
+    success: true,
+    message: "Google OAuth2 URL generated successfully",
+    data: {
+      url: {
+        url,
+      },
+    },
+  });
+};
 
-export const getGoogleAuthUrlController= async(req,res)=>{
-  const url =generateAuthUrl();
-  res.statatus(200).json({
-    success:true,
-    message:"Google OAuth2 URL generated successfully",
-    data:{
-      url
-    }
-  })
-}
+export const loginOrRegisterGoogleController = async (req, res) => {
+
+  const {code}=req.body;
+  if(!code){
+    throw createHttpError(400, "Authorization code is required");
+  }
+  const session = await loginOrRegisterGoogleController(code);
+  setupSession(res, session);
+  res.json({
+    status: 200,
+    message: "Successfully logged in or registered via Google OAuth2",
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
+};

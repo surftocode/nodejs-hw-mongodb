@@ -15,13 +15,14 @@ import handlebars from "handlebars";
 import path from "node:path";
 import fs from "node:fs/promises";
 import dotenv from "dotenv";
+import { getFullNameFromGoogle, validateCode } from "../utils/googleOauth2.js";
+
+
 dotenv.config();
 
 export const registerUser = async (payload) => {
-  console.log("incoming payload:", payload);
   payload.email = payload.email.trim().toLowerCase();
   const existingUser = await User.findOne({ email: payload.email });
-  console.log("user var:", existingUser);
   if (existingUser) throw createHttpError(409, "Email has already been added");
 
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
@@ -140,50 +141,6 @@ export const requestResetToken = async (email) => {
   console.log("Email has send to:", user.email);
 };
 
-// export const requestResetToken = async (email) => {
-//   const user = await User.findOne({ email });
-//   if (!user) {
-//     throw createHttpError(404, "User could not found");
-//   }
-//
-
-//   const resetToken = jwt.sign(
-//     {
-//       data: user._id.toString(),
-//       email: user.email,
-//     },
-//     env("JWT_SECRET"),
-//     {
-//       expiresIn: "1h",
-//     }
-//   );
-//   console.log("Token oluşturuldu:", resetToken);
-
-//   const resetPasswordTemplatePath = path.join(
-//     TEMPLATE_DIR,
-//     "reset-password-email.html"
-//   );
-
-//   const templateSource = (
-//     await fs.readFile("reset-password-email.html", "utf-8")
-//   ).toString();
-
-//   const template = handlebars.compile(templateSource);
-//   const html = template({
-//     name: user.name,
-//     link: resetPasswordTemplatePath,
-//   });
-//   console.log("📧 sendEmail çağrılıyor...");
-//   await sendEmail({
-//     from: env("SMTP_FROM"),
-//     to: user.email,
-//     subject: "Şifre sıfırlama ekranı ✔",
-//     text: "Şifreni sıfırlamak mı istiyorsun?", // plain‑text body
-//     html,
-//   });
-//   console.log("email gönderildi to:", user.email);
-// };
-
 export const resetPassword = async (payload) => {
   let entries;
 
@@ -198,4 +155,31 @@ export const resetPassword = async (payload) => {
   const encryptedPassword = await bcrypt.hash(payload.password, 10);
   await User.updateOne({ _id: user._id }, { password: encryptedPassword });
   await Session.deleteMany({ userId: user._id });
+};
+
+export const loginOrRegisterGoogleUser = async (code) => {
+  const loginTicket = await validateCode(code);
+  console.log("loginTicket:", loginTicket);
+  const payload = loginTicket.getPayload();
+  console.log("payload:", payload);
+  if (!payload) {
+    throw createHttpError(401, "Unauthorized");
+  }
+
+  let user = await User.findOne({ email: payload.email });
+  console.log("user found:", user);
+  if (!user) {
+    const password = await bcrypt.hash(randomBytes(10), 10);
+    user = await User.create({
+      email: payload.email,
+      name: getFullNameFromGoogle(payload),
+      password: password,
+      role: "user",
+    });
+  }
+  const newSession = createSession();
+  return await Session.create({
+    ...newSession,
+    userId: user._id,
+  });
 };
